@@ -67,7 +67,7 @@ git add .
 git commit -m "Initial commit"
 
 # 关联到 GitHub 仓库（替换为您的仓库 URL）
-git remote add origin https://github.com/您的用户名/probability-distribution-app.git
+git remote add origin https://github.com/heping2007/probability-distribution-app.git
 
 # 推送到 GitHub 仓库
 git push -u origin master
