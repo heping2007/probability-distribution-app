@@ -8,8 +8,8 @@ const PoissonDistribution: React.FC = () => {
   const { distribution, parameters, data, loading, updateParameter } = useDistribution('poisson', [0, 20], 21);
 
   if (loading || !distribution) {
-    return <div>加载中...</div>;
-  }
+      return <div>Loading...</div>;
+    }
 
   return (
     <div className="distribution-container">
@@ -20,7 +20,7 @@ const PoissonDistribution: React.FC = () => {
       
       <div className="parameters">
         <ParameterSlider
-          label="事件率 (λ)"
+          label="Rate Parameter (λ)"
           value={parameters.lambda || 5}
           onChange={(value) => updateParameter('lambda', value)}
           min={0.5}

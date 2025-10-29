@@ -8,7 +8,7 @@ const BinomialDistribution: React.FC = () => {
   const { distribution, parameters, data, loading, updateParameter } = useDistribution('binomial', [0, 20], 21);
 
   if (loading || !distribution) {
-    return <div>加载中...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -20,7 +20,7 @@ const BinomialDistribution: React.FC = () => {
       
       <div className="parameters">
         <ParameterSlider
-          label="试验次数 (n)"
+          label="Number of Trials (n)"
           value={parameters.n || 10}
           onChange={(value) => updateParameter('n', Math.round(value))}
           min={1}
@@ -28,7 +28,7 @@ const BinomialDistribution: React.FC = () => {
           step={1}
         />
         <ParameterSlider
-          label="成功概率 (p)"
+          label="Probability of Success (p)"
           value={parameters.p || 0.5}
           onChange={(value) => updateParameter('p', value)}
           min={0.1}

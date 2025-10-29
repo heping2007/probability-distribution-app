@@ -36,43 +36,43 @@ const DataInputTab: React.FC<DataInputTabProps> = ({ onDataChange }) => {
           className={`method-button ${inputMethod === 'file' ? 'active' : ''}`}
           onClick={() => setInputMethod('file')}
         >
-          文件上传
+          File Upload
         </button>
         <button
           className={`method-button ${inputMethod === 'distribution' ? 'active' : ''}`}
           onClick={() => setInputMethod('distribution')}
         >
-          分布生成
+          Distribution Generator
         </button>
         <button
           className={`method-button ${inputMethod === 'ai' ? 'active' : ''}`}
           onClick={() => setInputMethod('ai')}
         >
-          AI生成数据
+          AI Generate Data
         </button>
       </div>
 
       <div className="input-content">
         {inputMethod === 'file' && (
           <div className="file-upload-section">
-            <h3>上传数据文件</h3>
-            <p>支持JSON和CSV格式的数据文件导入</p>
+            <h3>Upload Data File</h3>
+            <p>Supports JSON and CSV format data file import</p>
             <FileImporter onFileImport={handleFileImport} />
           </div>
         )}
 
         {inputMethod === 'distribution' && (
           <div className="distribution-generator-section">
-            <h3>从统计分布生成数据</h3>
-            <p>选择分布类型并设置参数生成模拟数据</p>
+            <h3>Generate from Statistical Distribution</h3>
+            <p>Select distribution type and set parameters to generate simulation data</p>
             <DistributionGenerator onDataGenerated={handleDistributionData} />
           </div>
         )}
 
         {inputMethod === 'ai' && (
           <div className="ai-generator-section">
-            <h3>AI生成数据</h3>
-            <p>描述您需要的数据模式和特征</p>
+            <h3>AI Data Generation</h3>
+            <p>Describe the data patterns and features you need</p>
             <AIDataGenerator onDataGenerated={handleAIData} />
           </div>
         )}

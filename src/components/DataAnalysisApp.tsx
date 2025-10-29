@@ -3,6 +3,8 @@ import Tabs from './common/Tabs';
 import DataInputTab from './data-input/DataInputTab';
 import StatisticalAnalysisTab from './analysis/StatisticalAnalysisTab';
 import MLEMOMAnalysisTab from './analysis/MLEMOMAnalysisTab';
+import ConfidenceIntervalTab from './analysis/ConfidenceIntervalTab';
+import HypothesisTestingTab from './analysis/HypothesisTestingTab';
 import DataVisualization from './visualization/DataVisualization';
 import './DataAnalysisApp.css';
 
@@ -22,15 +24,18 @@ const DataAnalysisApp: React.FC = () => {
   return (
     <div className="data-analysis-app">
       <header className="app-header">
-        <h1>数据分析平台</h1>
-        <p>全面的数据输入与统计分析工具</p>
+        <h1>Data Analysis Platform</h1>
+        <p>Comprehensive Data Input and Statistical Analysis Tool</p>
       </header>
 
       <Tabs 
         tabs={[
-          { id: 'input', label: '数据输入' },
-          { id: 'stats', label: '基本统计', disabled: data.length === 0 },
-          { id: 'mlemom', label: 'MLE/MoM分析', disabled: data.length === 0 },
+          { id: 'input', label: 'Data Input' },
+          { id: 'stats', label: 'Basic Statistics', disabled: data.length === 0 },
+          { id: 'mlemom', label: 'MLE/MoM Analysis', disabled: data.length === 0 },
+          { id: 'confidence', label: 'Confidence Intervals', disabled: data.length === 0 },
+          { id: 'hypothesis-testing', label: 'Hypothesis Testing', disabled: data.length === 0 }
+
         ]}
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -48,17 +53,24 @@ const DataAnalysisApp: React.FC = () => {
         {activeTab === 'mlemom' && (
           <MLEMOMAnalysisTab data={data} />
         )}
+          {activeTab === 'confidence' && (
+          <ConfidenceIntervalTab data={data} />
+        )}
+        
+        {activeTab === 'hypothesis-testing' && (
+          <HypothesisTestingTab data={data} />
+        )}
       </div>
 
       {data.length > 0 && (
         <div className="visualization-section">
-          <h2>数据可视化</h2>
+          <h2>Data Visualization</h2>
           <DataVisualization data={data} />
         </div>
       )}
 
       <footer className="app-footer">
-        <p>数据分析平台 - 强大的数据输入与分析工具</p>
+        <p>Data Analysis Platform - Powerful Data Input and Analysis Tool</p>
       </footer>
     </div>
   );

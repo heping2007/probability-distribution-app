@@ -1,0 +1,496 @@
+.hypothesis-testing-tab {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hypothesis-testing-tab h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.test-settings {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.setting-group {
+  margin-bottom: 20px;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.axis-select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.axis-select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.hypothesis-form {
+  margin-top: 25px;
+}
+
+.hypothesis-form h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.hypothesis-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.hypothesis-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.hypothesis-item label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.hypothesis-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hypothesis-input span {
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.mean-input,
+.alpha-input {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.mean-input:focus,
+.alpha-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.hypothesis-display {
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-family: 'Courier New', monospace;
+}
+
+.significance-group {
+  margin-bottom: 20px;
+}
+
+.significance-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.alpha-explanation {
+  margin-top: 5px;
+  color: #6c757d;
+}
+
+.test-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.test-button:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.test-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.test-results {
+  display: grid;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.result-summary {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.result-summary h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.conclusion-card {
+  border-radius: 6px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.conclusion-card.reject {
+  background-color: #fee;
+  border: 2px solid #f8d7da;
+}
+
+.conclusion-card.not-reject {
+  background-color: #eafaf1;
+  border: 2px solid #d4edda;
+}
+
+.conclusion-card h4 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.conclusion-card.reject h4 {
+  color: #721c24;
+}
+
+.conclusion-card.not-reject h4 {
+  color: #155724;
+}
+
+.conclusion-text {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.conclusion-card.reject .conclusion-text {
+  color: #721c24;
+}
+
+.conclusion-card.not-reject .conclusion-text {
+  color: #155724;
+}
+
+.interpretation-text {
+  color: #495057;
+}
+
+.result-method {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.result-method h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+/* 置信区间图表 */
+.confidence-interval-chart {
+  margin: 20px 0;
+}
+
+.interval-axis {
+  height: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 10px;
+  border: 1px solid #dee2e6;
+}
+
+.interval-bar {
+  position: absolute;
+  height: 100%;
+  background-color: #3498db;
+  border-radius: 10px;
+  opacity: 0.7;
+  transition: width 0.5s ease, left 0.5s ease;
+}
+
+.hypothesis-marker {
+  position: absolute;
+  width: 4px;
+  height: 30px;
+  background-color: #333;
+  top: -5px;
+  transform: translateX(-50%);
+  transition: left 0.5s ease;
+}
+
+.hypothesis-marker.outside {
+  background-color: #e74c3c;
+}
+
+.hypothesis-marker.inside {
+  background-color: #27ae60;
+}
+
+.mean-marker {
+  position: absolute;
+  width: 2px;
+  height: 25px;
+  background-color: #f39c12;
+  top: -2px;
+  transform: translateX(-50%);
+  transition: left 0.5s ease;
+}
+
+.interval-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* p值比较 */
+.p-value-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.value-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.value-label {
+  font-weight: 600;
+  color: #34495e;
+}
+
+.p-value,
+.alpha-value {
+  font-size: 1.1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+.p-value {
+  color: #e74c3c;
+}
+
+.alpha-value {
+  color: #34495e;
+}
+
+.comparison-result {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.comparison-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.comparison-text.p-less-alpha {
+  background-color: #fee;
+  color: #e74c3c;
+}
+
+.comparison-text.p-greater-alpha {
+  background-color: #eafaf1;
+  color: #27ae60;
+}
+
+/* 分布图表 */
+.distribution-chart {
+  margin: 20px 0;
+  position: relative;
+}
+
+.distribution-curve {
+  height: 150px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px solid #dee2e6;
+}
+
+.curve-shape {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-image: linear-gradient(to top, #3498db, transparent);
+  clip-path: polygon(0% 100%, 1% 95%, 2% 90%, 3% 85%, 4% 80%, 5% 75%, 10% 60%, 15% 50%, 20% 40%, 30% 25%, 40% 15%, 50% 10%, 60% 15%, 70% 25%, 80% 40%, 85% 50%, 90% 60%, 95% 75%, 96% 80%, 97% 85%, 98% 90%, 99% 95%, 100% 100%);
+  opacity: 0.3;
+}
+
+.left-rejection-region,
+.right-rejection-region {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  background-color: #e74c3c;
+  opacity: 0.3;
+  transition: width 0.5s ease, right 0.5s ease;
+}
+
+.left-rejection-region {
+  left: 0;
+}
+
+.right-rejection-region {
+  right: 0;
+}
+
+.test-statistic-marker {
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  background-color: #333;
+  top: 0;
+  transform: translateX(-50%);
+  transition: left 0.5s ease;
+}
+
+.test-statistic-marker.in-rejection {
+  background-color: #e74c3c;
+}
+
+.test-statistic-marker.not-in-rejection {
+  background-color: #27ae60;
+}
+
+.distribution-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 5px;
+}
+
+.rejection-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #495057;
+}
+
+/* 详细统计信息 */
+.detailed-stats {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.detailed-stats h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-label {
+  font-weight: 600;
+  color: #34495e;
+}
+
+.stat-value {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .hypothesis-row {
+    flex-direction: column;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .distribution-curve {
+    height: 120px;
+  }
+  
+  .interval-axis {
+    height: 15px;
+  }
+  
+  .hypothesis-marker {
+    height: 25px;
+  }
+  
+  .mean-marker {
+    height: 20px;
+  }
+}

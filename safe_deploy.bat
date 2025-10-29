@@ -23,7 +23,7 @@ cmd /c "
   echo. >> vite.config.ts
   echo // https://vitejs.dev/config/ >> vite.config.ts
   echo export default defineConfig({ >> vite.config.ts
-  echo   base: '/probability-distribution-app/', >> vite.config.ts
+  echo   base: '', >> vite.config.ts
   echo   plugins: [react()], >> vite.config.ts
   echo }); >> vite.config.ts
   echo Configuration updated with correct base path

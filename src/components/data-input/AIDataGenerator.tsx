@@ -15,7 +15,7 @@ const AIDataGenerator: React.FC<AIDataGeneratorProps> = ({ onDataGenerated }) =>
 
   const handleGenerate = async () => {
     if (!description.trim()) {
-      setError('请输入数据描述');
+      setError('Please enter data description');
       return;
     }
 
@@ -24,19 +24,19 @@ const AIDataGenerator: React.FC<AIDataGeneratorProps> = ({ onDataGenerated }) =>
     setIsGenerating(true);
 
     try {
-      console.log('开始通过代理API生成数据...');
-      // 调用AI服务生成数据（通过本地代理API）
+      console.log('Starting data generation via proxy API...');
+      // Call AI service to generate data (via local proxy API)
       const data = await generateDataWithAI(description, sampleCount);
       
-      // 将生成的数据传递给父组件
+      // Pass the generated data to the parent component
       onDataGenerated(data);
       
-      // 显示成功消息
-      setSuccessMessage(`成功生成${data.length}个数据点！`);
+      // Show success message
+      setSuccessMessage(`Successfully generated ${data.length} data points!`);
       
     } catch (err) {
-      console.error('生成数据失败:', err);
-      setError('数据生成失败，请检查代理服务是否正常运行');
+      console.error('Failed to generate data:', err);
+      setError('Failed to generate data. Please check if the proxy service is running properly');
     } finally {
       setIsGenerating(false);
     }
@@ -44,21 +44,21 @@ const AIDataGenerator: React.FC<AIDataGeneratorProps> = ({ onDataGenerated }) =>
 
   return (
     <div className="ai-data-generator">
-      <h3>AI 数据生成器（通过代理API）</h3>
+      <h3>AI Data Generator (via Proxy API)</h3>
       <div className="form-group">
-        <label htmlFor="description">数据描述:</label>
+        <label htmlFor="description">Data Description:</label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="请描述您想要生成的数据，例如：'生成广东气温随季节变化的数据'"
+          placeholder="Please describe the data you want to generate, e.g., 'Generate temperature data in Guangdong changing with seasons'"
           rows={3}
         />
-        <small className="hint">提示：越详细的描述可以获得更准确的数据</small>
+        <small className="hint">Hint: More detailed descriptions will yield more accurate data</small>
       </div>
       
       <div className="form-group">
-        <label htmlFor="sampleCount">样本数量:</label>
+        <label htmlFor="sampleCount">Sample Count:</label>
         <input
           type="number"
           id="sampleCount"
@@ -74,14 +74,14 @@ const AIDataGenerator: React.FC<AIDataGeneratorProps> = ({ onDataGenerated }) =>
         disabled={isGenerating}
         className="generate-button"
       >
-        {isGenerating ? '生成中...' : '生成数据'}
+        {isGenerating ? 'Generating...' : 'Generate Data'}
       </button>
 
       {error && <div className="error-message">{error}</div>}
       {successMessage && <div className="success-message">{successMessage}</div>}
       
       <div className="status-info">
-        <p>状态：代理API服务运行中</p>
+        <p>Status: Proxy API Service Running</p>
       </div>
     </div>
   );

@@ -8,8 +8,8 @@ const NormalDistribution: React.FC = () => {
   const { distribution, parameters, data, loading, updateParameter } = useDistribution('normal', [-5, 5], 100);
 
   if (loading || !distribution) {
-    return <div>加载中...</div>;
-  }
+      return <div>Loading...</div>;
+    }
 
   return (
     <div className="distribution-container">
@@ -20,7 +20,7 @@ const NormalDistribution: React.FC = () => {
       
       <div className="parameters">
         <ParameterSlider
-          label="均值 (μ)"
+          label="Mean (μ)"
           value={parameters.mean || 0}
           onChange={(value) => updateParameter('mean', value)}
           min={-3}
@@ -28,7 +28,7 @@ const NormalDistribution: React.FC = () => {
           step={0.1}
         />
         <ParameterSlider
-          label="标准差 (σ)"
+          label="Standard Deviation (σ)"
           value={parameters.stdDev || 1}
           onChange={(value) => updateParameter('stdDev', value)}
           min={0.1}
