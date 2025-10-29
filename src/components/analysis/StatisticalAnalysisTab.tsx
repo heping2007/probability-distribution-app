@@ -175,6 +175,7 @@ function calculateStatistics(data: DataPoint[]): StatisticalResults {
     yMax,
     correlation,
   };
+
 }
 
 // Get color based on correlation coefficient

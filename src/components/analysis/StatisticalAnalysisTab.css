@@ -5,6 +5,40 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.confidence-level-selector {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff0f5;
+  border-radius: 8px;
+  border-left: 4px solid #ff69b4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.confidence-level-selector label {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.confidence-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.confidence-select:focus {
+  outline: none;
+  border-color: #ff69b4;
+  box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.2);
+}
+
 .statistical-analysis-tab h2 {
   margin-top: 0;
   margin-bottom: 20px;

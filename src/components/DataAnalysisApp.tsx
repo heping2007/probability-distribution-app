@@ -4,6 +4,7 @@ import DataInputTab from './data-input/DataInputTab';
 import StatisticalAnalysisTab from './analysis/StatisticalAnalysisTab';
 import MLEMOMAnalysisTab from './analysis/MLEMOMAnalysisTab';
 import HypothesisTestingTab from './analysis/HypothesisTestingTab';
+import ConfidenceIntervalTab from './analysis/ConfidenceIntervalTab';
 import TestDataGenerator from './analysis/TestDataGenerator';
 import DataVisualization from './visualization/DataVisualization';
 import './DataAnalysisApp.css';
@@ -31,6 +32,7 @@ const DataAnalysisApp: React.FC = () => {
       <Tabs 
         tabs={[
           { id: 'input', label: 'Data Input' },
+          { id: 'ci', label: 'Confidence Interval', disabled: data.length === 0 },
           { id: 'stats', label: 'Basic Statistics', disabled: data.length === 0 },
           { id: 'mlemom', label: 'MLE/MoM Analysis', disabled: data.length === 0 },
           { id: 'testing', label: 'Hypothesis Testing', disabled: data.length === 0 },
@@ -45,6 +47,10 @@ const DataAnalysisApp: React.FC = () => {
             <DataInputTab onDataChange={handleDataChange} />
             <TestDataGenerator onDataChange={handleDataChange} />
           </div>
+        )}
+        
+        {activeTab === 'ci' && (
+          <ConfidenceIntervalTab data={data} />
         )}
         
         {activeTab === 'stats' && (
