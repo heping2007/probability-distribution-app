@@ -1,0 +1,196 @@
+.welcome-guide-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.welcome-guide-container {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-guide-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.welcome-guide-close:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.welcome-guide-content {
+  padding: 40px;
+  padding-bottom: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.welcome-guide-content h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.welcome-guide-body {
+  color: #555;
+  line-height: 1.6;
+}
+
+.welcome-guide-body p {
+  margin-bottom: 16px;
+}
+
+.welcome-guide-body ul {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.welcome-guide-body li {
+  margin-bottom: 8px;
+}
+
+.welcome-guide-body strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.welcome-guide-navigation {
+  padding: 20px 40px 40px;
+  border-top: 1px solid #eee;
+}
+
+.welcome-guide-indicators {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  gap: 8px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.indicator.active {
+  background-color: #3498db;
+  width: 30px;
+  border-radius: 5px;
+}
+
+.welcome-guide-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.welcome-guide-buttons button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.previous-button {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.previous-button:hover {
+  background-color: #e0e0e0;
+}
+
+.next-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.next-button:hover {
+  background-color: #2980b9;
+}
+
+.skip-button {
+  background-color: transparent;
+  color: #666;
+  text-decoration: underline;
+}
+
+.skip-button:hover {
+  color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .welcome-guide-container {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .welcome-guide-content {
+    padding: 30px 20px;
+  }
+  
+  .welcome-guide-navigation {
+    padding: 20px;
+  }
+  
+  .welcome-guide-buttons {
+    flex-direction: column;
+  }
+  
+  .welcome-guide-buttons button {
+    width: 100%;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-guide-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.welcome-guide-body > * {
+  animation: fadeIn 0.3s ease-out 0.1s both;
+}

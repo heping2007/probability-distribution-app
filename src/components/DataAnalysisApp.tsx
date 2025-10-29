@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tabs from './common/Tabs';
 import DataInputTab from './data-input/DataInputTab';
 import StatisticalAnalysisTab from './analysis/StatisticalAnalysisTab';
@@ -6,6 +6,7 @@ import MLEMOMAnalysisTab from './analysis/MLEMOMAnalysisTab';
 import ConfidenceIntervalTab from './analysis/ConfidenceIntervalTab';
 import HypothesisTestingTab from './analysis/HypothesisTestingTab';
 import DataVisualization from './visualization/DataVisualization';
+import WelcomeGuide from './WelcomeGuide';
 import './DataAnalysisApp.css';
 
 export interface DataPoint {
@@ -16,6 +17,24 @@ export interface DataPoint {
 const DataAnalysisApp: React.FC = () => {
   const [data, setData] = useState<DataPoint[]>([]);
   const [activeTab, setActiveTab] = useState<string>('input');
+  const [showWelcomeGuide, setShowWelcomeGuide] = useState<boolean>(false);
+
+  // Check if user has seen the welcome guide before
+  useEffect(() => {
+    const hasSeenGuide = localStorage.getItem('hasSeenWelcomeGuide');
+    if (!hasSeenGuide) {
+      // Show welcome guide after a small delay for better user experience
+      const timer = setTimeout(() => {
+        setShowWelcomeGuide(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleCloseWelcomeGuide = () => {
+    setShowWelcomeGuide(false);
+    localStorage.setItem('hasSeenWelcomeGuide', 'true');
+  };
 
   const handleDataChange = (newData: DataPoint[]) => {
     setData(newData);
@@ -72,6 +91,8 @@ const DataAnalysisApp: React.FC = () => {
       <footer className="app-footer">
         <p>Data Analysis Platform - Powerful Data Input and Analysis Tool</p>
       </footer>
+
+      {showWelcomeGuide && <WelcomeGuide onClose={handleCloseWelcomeGuide} />}
     </div>
   );
 };
