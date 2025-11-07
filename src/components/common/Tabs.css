@@ -7,6 +7,8 @@
   background-color: #f0f0f0;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .tab-button {
@@ -17,6 +19,9 @@
   font-size: 16px;
   transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
+  color: #000000;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .tab-button:hover:not(.disabled) {

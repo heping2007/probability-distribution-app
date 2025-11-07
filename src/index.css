@@ -1,11 +1,91 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  /* 统一字体家族 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* 主色调 - 科技蓝系列 */
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-200: #bfdbfe;
+  --primary-300: #93c5fd;
+  --primary-400: #60a5fa;
+  --primary-500: #3b82f6;  /* 主科技蓝 */
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+  --primary-800: #1e40af;
+  --primary-900: #1e3a8a;
+
+  /* 辅助色 - 专业紫系列 */
+  --secondary-50: #faf5ff;
+  --secondary-100: #f3e8ff;
+  --secondary-200: #e9d5ff;
+  --secondary-300: #d8b4fe;
+  --secondary-400: #c084fc;
+  --secondary-500: #a855f7;  /* 主专业紫 */
+  --secondary-600: #9333ea;
+  --secondary-700: #7c3aed;
+  --secondary-800: #6b21a8;
+  --secondary-900: #581c87;
+
+  /* 中性色 */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* 分布类型色彩区分 */
+  --normal-color: var(--primary-500);
+  --normal-color-light: var(--primary-100);
+  --normal-color-dark: var(--primary-700);
+
+  --uniform-color: var(--secondary-500);
+  --uniform-color-light: var(--secondary-100);
+  --uniform-color-dark: var(--secondary-700);
+
+  --exponential-color: #10b981;
+  --exponential-color-light: #d1fae5;
+  --exponential-color-dark: #047857;
+
+  --binomial-color: #f59e0b;    /* 琥珀色 */
+  --poisson-color: #ef4444;     /* 红色 */
+
+  /* 状态颜色 */
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --info-color: var(--primary-500);
+
+  /* 基础颜色变量 */
+  --primary: var(--primary-500);
+  --primary-dark: var(--primary-700);
+  --secondary: var(--secondary-500);
+  --secondary-dark: var(--secondary-700);
+  --text: var(--gray-800);
+  --text-light: var(--gray-500);
+  --background: var(--gray-50);
+  --surface: var(--gray-50);
+
+  /* 原有变量兼容 */
+  --primary-color: var(--primary);
+  --primary-hover: var(--primary-600);
+  --secondary-color: var(--secondary);
+  --secondary-hover: var(--secondary-600);
+  --background-color: var(--background);
+  --text-color: var(--text);
+  --border-color: var(--gray-200);
+  --hover-color: var(--gray-100);
+  --disabled-color: var(--gray-400);
+
+  color-scheme: light;
+  color: var(--text-color);
+  background-color: var(--background-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,10 +104,171 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background-color);
+  background-image:
+    radial-gradient(at 10% 20%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* 应用容器 - 渐变背景 */
+.app-container {
+  background: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 动态粒子背景 */
+.background-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+  animation: particleMove 20s ease-in-out infinite;
+}
+
+@keyframes particleMove {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(180deg); }
+}
+
+/* 玻璃态内容区域 */
+.content-glass {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* 分布专属背景主题 */
+.bg-theme-normal {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.1) 0%, 
+    rgba(37, 99, 235, 0.2) 50%, 
+    rgba(29, 78, 216, 0.1) 100%);
+  border-left: 4px solid var(--primary-500);
+}
+
+.bg-theme-uniform {
+  background: linear-gradient(135deg, 
+    rgba(168, 85, 247, 0.1) 0%, 
+    rgba(147, 51, 234, 0.2) 50%, 
+    rgba(124, 58, 237, 0.1) 100%);
+  border-left: 4px solid var(--secondary-500);
+}
+
+.bg-theme-exponential {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.1) 0%, 
+    rgba(5, 150, 105, 0.2) 50%, 
+    rgba(4, 120, 87, 0.1) 100%);
+  border-left: 4px solid var(--exponential-color);
+}
+
+/* 动态色彩流动 */
+.animated-background {
+  background: linear-gradient(-45deg, 
+    #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 科技感网格背景 */
+.tech-grid-bg {
+  background-color: #0f172a;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+/* 卡片悬浮效果 */
+.distribution-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.distribution-section:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 输入区域发光效果 */
+.parameter-group {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.parameter-group:focus-within {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 8px 30px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* 结果区域霓虹效果 */
+.results-container {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.3),
+    inset 0 0 20px rgba(59, 130, 246, 0.1);
+  color: white;
+}
+
+.significant-result {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.3), 
+    rgba(59, 130, 246, 0.3));
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  box-shadow:
+    0 0 30px rgba(16, 185, 129, 0.4),
+    inset 0 0 30px rgba(16, 185, 129, 0.1);
 }
 
 h1 {
@@ -37,32 +278,388 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--primary-color);
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s ease;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 3px solid rgba(59, 130, 246, 0.3);
+  outline-offset: 2px;
+}
+button:disabled {
+  background-color: var(--gray-300);
+  border-color: var(--gray-300);
+  color: var(--gray-500);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-@media (prefers-color-scheme: light) {
+/* 按钮状态系统 */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+}
+
+.btn-primary:disabled {
+  background: var(--gray-300);
+  color: var(--gray-500);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 精致的动画按钮 */
+.generate-btn {
+  background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.generate-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile Basic Adaptation */
+@media (max-width: 768px) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    font-size: 14px;
   }
-  a:hover {
-    color: #747bff;
-  }
+  
   button {
-    background-color: #f9f9f9;
+    padding: 12px 24px;
+    min-height: 44px;
   }
+  
+  input, select, textarea {
+    min-height: 44px;
+  }
+  
+  .container {
+    padding: 16px;
+  }
+  
+  .section {
+    padding: 16px;
+  }
+  
+  .app-container {
+    background: linear-gradient(135deg, 
+      #4facfe 0%, 
+      #00f2fe 100%);
+  }
+  
+  .content-glass {
+    margin: 10px;
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .distribution-section {
+    padding: 20px;
+    margin: 10px 0;
+  }
+  
+  .parameter-group {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  .results-container {
+    padding: 20px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: var(--gray-100);
+    --text-light: var(--gray-400);
+    --background: var(--gray-900);
+    --surface: var(--gray-800);
+    --border-color: var(--gray-700);
+  }
+  
+  body {
+    background-color: var(--background);
+    background-image:
+      radial-gradient(at 10% 20%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+      radial-gradient(at 90% 80%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+  }
+  
+  .distribution-card {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.9), rgba(17, 24, 39, 0.9));
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .distribution-card.normal {
+    background: linear-gradient(to bottom right, var(--gray-800), rgba(59, 130, 246, 0.1));
+  }
+  
+  .distribution-card.uniform {
+    background: linear-gradient(to bottom right, var(--gray-800), rgba(168, 85, 247, 0.1));
+  }
+  
+  .distribution-card.exponential {
+    background: linear-gradient(to bottom right, var(--gray-800), rgba(16, 185, 129, 0.1));
+  }
+  
+  .form-input {
+    background: var(--gray-700);
+    color: var(--gray-100);
+  }
+  
+  .form-input:focus {
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .form-input:disabled {
+    background: var(--gray-800);
+    color: var(--gray-500);
+  }
+}
+
+/* 优雅的毛玻璃效果 */
+.control-panel {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+/* 微妙的渐变色和阴影 */
+.distribution-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 平滑的过渡动画 */
+.parameter-input, .distribution-select {
+  transition: all 0.3s ease;
+  border: 2px solid var(--gray-300);
+}
+
+.parameter-input:focus, .distribution-select:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 输入框状态反馈 */
+.form-input {
+  border: 2px solid var(--gray-300);
+  border-radius: 6px;
+  padding: 10px 12px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+.form-input:invalid {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-input:disabled {
+  background: var(--gray-100);
+  color: var(--gray-500);
+  cursor: not-allowed;
+}
+
+/* 优雅的加载状态 */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 微交互提示 */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 8px;
+}
+
+/* 图表容器美化 */
+.chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 结果卡片动效 */
+.result-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 现代化的输入组 */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 分布选择器美化 */
+.distribution-option {
+  padding: 16px;
+  border: 2px solid var(--gray-300);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  background: white;
+}
+
+.distribution-option:hover {
+  border-color: var(--primary-500);
+  transform: scale(1.02);
+}
+
+.distribution-option.selected {
+  border-color: var(--primary-500);
+  background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+}
+
+/* 分布选择卡片 */
+.distribution-card {
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.distribution-card.normal {
+  border-top: 4px solid var(--normal-color);
+  background: linear-gradient(to bottom right, white, var(--normal-color-light));
+}
+
+.distribution-card.uniform {
+  border-top: 4px solid var(--uniform-color);
+  background: linear-gradient(to bottom right, white, var(--uniform-color-light));
+}
+
+.distribution-card.exponential {
+  border-top: 4px solid var(--exponential-color);
+  background: linear-gradient(to bottom right, white, var(--exponential-color-light));
+}
+
+.distribution-card.selected {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* 响应式网格布局 */
+.parameters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+/* 添加品牌标识 */
+.app-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  background-clip: text;
 }

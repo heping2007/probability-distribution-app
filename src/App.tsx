@@ -1,11 +1,16 @@
-// React导入在新版本中可能不需要，但保留以防万一
+// React import might not be needed in newer versions, but kept for compatibility
 import './App.css'
 import DataAnalysisApp from './components/DataAnalysisApp'
 
 function App() {
   return (
-    <div className="App">
-      <DataAnalysisApp />
+    <div className="app-container">
+      {/* Background particle effect */}
+      <div className="background-particles" />
+      {/* Main content area */}
+      <div className="main-content">
+        <DataAnalysisApp />
+      </div>
     </div>
   )
 }

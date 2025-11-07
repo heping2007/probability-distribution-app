@@ -22,15 +22,15 @@ const FileImporter: React.FC<FileImporterProps> = ({ onFileImport }) => {
         const content = e.target?.result as string;
         let data: {x: number, y: number}[] = [];
 
-        // 尝试解析为JSON
+        // Try to parse as JSON
         try {
           data = JSON.parse(content);
         } catch (jsonError) {
-          // 如果不是JSON，尝试解析为CSV
+          // If not JSON, try to parse as CSV
           const lines = content.split('\n').filter(line => line.trim() !== '');
           
           if (lines.length > 0) {
-            // 假设第一行是标题
+            // Assume first row is header
             const headers = lines[0].split(',').map(header => header.trim());
             
             if (headers.length >= 2) {
@@ -42,7 +42,7 @@ const FileImporter: React.FC<FileImporterProps> = ({ onFileImport }) => {
                 };
               }).filter(point => !isNaN(point.x) && !isNaN(point.y));
             } else {
-              throw new Error('CSV格式不正确，需要至少两列数据');
+              throw new Error('CSV format is incorrect, at least two columns of data are required');
             }
           }
         }
@@ -51,22 +51,22 @@ const FileImporter: React.FC<FileImporterProps> = ({ onFileImport }) => {
           onFileImport(data);
           setImportStatus({
             status: 'success',
-            message: `成功导入 ${data.length} 个数据点`
+            message: `Successfully imported ${data.length} data points`
           });
         } else {
-          throw new Error('文件中没有有效的数据点');
+          throw new Error('No valid data points in file');
         }
       } catch (error) {
         setImportStatus({
           status: 'error',
-          message: `导入失败: ${error instanceof Error ? error.message : '未知错误'}`
+          message: `Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`
         });
       }
     };
 
     reader.readAsText(file);
     
-    // 重置文件输入，以便可以再次选择同一个文件
+    // Reset file input to allow selecting the same file again
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -75,10 +75,11 @@ const FileImporter: React.FC<FileImporterProps> = ({ onFileImport }) => {
   return (
     <div className="file-importer">
       <button
+        type="button"
         className="import-button"
         onClick={() => fileInputRef.current?.click()}
       >
-        导入数据文件
+        Import Data File
       </button>
       <input
         type="file"
@@ -93,7 +94,7 @@ const FileImporter: React.FC<FileImporterProps> = ({ onFileImport }) => {
       {importStatus.status === 'error' && (
         <div className="import-status error">{importStatus.message}</div>
       )}
-      <div className="import-hint">支持JSON和CSV格式文件</div>
+      <div className="import-hint">Supports JSON and CSV format files</div>
     </div>
   );
 };

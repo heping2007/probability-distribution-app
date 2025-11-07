@@ -1,4 +1,4 @@
-// import { evaluate } from 'mathjs'; // 暂时注释，需要时启用
+// import { evaluate } from 'mathjs'; // Temporarily commented out, enable when needed
 
 export const factorial = (n: number): number => {
   if (n < 0) return 0;

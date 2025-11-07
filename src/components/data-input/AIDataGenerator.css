@@ -133,7 +133,7 @@
   margin: 0;
 }
 
-/* 适配移动设备 */
+/* Mobile device adaptation */
 @media (max-width: 768px) {
   .ai-data-generator {
     padding: 15px;

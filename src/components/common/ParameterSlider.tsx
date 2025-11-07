@@ -19,7 +19,7 @@ const ParameterSlider: React.FC<ParameterSliderProps> = ({
   max,
   step
 }) => {
-  // 使用onChange或onValueChange，优先使用onValueChange以保持向后兼容性
+  // Use onChange or onValueChange, prioritize onValueChange for backward compatibility
   const handleChange = onValueChange || onChange || (() => {});
   return (
     <div className="parameter-slider">
@@ -32,7 +32,11 @@ const ParameterSlider: React.FC<ParameterSliderProps> = ({
         max={max}
         step={step}
         value={value}
-        onChange={(e) => handleChange(parseFloat(e.target.value))}
+        onChange={(e) => {
+        const newValue = parseFloat(e.target.value);
+        handleChange(newValue);
+      }}
+        onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
       />
     </div>
   );

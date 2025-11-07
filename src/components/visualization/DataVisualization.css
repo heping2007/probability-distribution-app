@@ -4,6 +4,8 @@
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .visualization-controls {
@@ -33,23 +35,24 @@
 }
 
 .chart-type-btn {
+  composes: btn;
+  background-color: var(--neutral-100);
+  color: var(--neutral-700);
+  border: 1px solid var(--neutral-200);
   padding: 8px 16px;
-  border: 1px solid #ddd;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
 }
 
 .chart-type-btn:hover {
-  background-color: #f0f0f0;
+  background-color: var(--neutral-200);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chart-type-btn.active {
-  background-color: #4a90e2;
+  background-color: var(--primary-500);
   color: white;
-  border-color: #4a90e2;
+  border-color: var(--primary-500);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .regression-toggle {
@@ -62,6 +65,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
 }
 

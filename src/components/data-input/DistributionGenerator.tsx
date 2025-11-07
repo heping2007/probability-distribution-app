@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DataPoint } from '../DataAnalysisApp';
 import ParameterSlider from '../common/ParameterSlider';
+import { poissonDistribution } from '../../utils/mathUtils';
 import './DistributionGenerator.css';
 
 interface DistributionGeneratorProps {
@@ -13,7 +14,7 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
   const [distributionType, setDistributionType] = useState<DistributionType>('normal');
   const [sampleSize, setSampleSize] = useState<number>(1000);
   
-  // 分布参数
+  // Distribution parameters
   const [mean, setMean] = useState<number>(0);
   const [stdDev, setStdDev] = useState<number>(1);
   const [n, setN] = useState<number>(10);
@@ -21,126 +22,195 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
   const [lambda, setLambda] = useState<number>(3);
   const [min, setMin] = useState<number>(0);
   const [max, setMax] = useState<number>(1);
+  
+  // UI state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [lastGenerated, setLastGenerated] = useState<string>('');
 
   const generateNormalData = (): DataPoint[] => {
-    const data: DataPoint[] = [];
+    // Generate random data points
+    const randomData: number[] = [];
+    const xMin = mean - 4 * stdDev;
+    const xMax = mean + 4 * stdDev;
+    
     for (let i = 0; i < sampleSize; i++) {
-      // Box-Muller变换生成正态分布
-      let u1 = 0, u2 = 0;
-      while(u1 === 0) u1 = Math.random();
-      while(u2 === 0) u2 = Math.random();
-      const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-      const x = mean + stdDev * z0;
-      data.push({ x, y: Math.random() }); // y值用于点的位置，这里随机生成
+      // Box-Muller transform to generate normal distribution random numbers
+      const u1 = Math.random();
+      const u2 = Math.random();
+      const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+      const y = mean + stdDev * z0;
+      // Only keep data points within the specified range
+      if (y >= xMin && y <= xMax) {
+        randomData.push(y);
+      }
     }
-    return data;
+    
+    // Calculate frequency distribution
+    const binCount = Math.min(20, Math.ceil(Math.sqrt(randomData.length)));
+    const binWidth = (xMax - xMin) / binCount;
+    const bins: DataPoint[] = Array(binCount).fill(0).map((_, i) => ({
+      x: xMin + i * binWidth + binWidth / 2, // Use bin midpoint as x value
+      y: 0
+    }));
+    
+    // Count points in each bin
+    randomData.forEach(value => {
+      const binIndex = Math.min(
+        binCount - 1,
+        Math.floor((value - xMin) / binWidth)
+      );
+      if (binIndex >= 0 && binIndex < binCount) {
+        bins[binIndex].y++;
+      }
+    });
+    
+    return bins;
   };
 
   const generateBinomialData = (): DataPoint[] => {
-    const data: DataPoint[] = [];
+    // 生成随机数据点
+    const randomData: number[] = [];
+    
     for (let i = 0; i < sampleSize; i++) {
-      let count = 0;
+      let successes = 0;
+      // 进行n次伯努利试验
       for (let j = 0; j < n; j++) {
-        if (Math.random() < p) count++;
+        if (Math.random() < p) {
+          successes++;
+        }
       }
-      data.push({ x: count, y: Math.random() });
+      randomData.push(successes);
     }
-    return data;
+    
+    // 统计每个可能结果的频率
+    const counts = Array(n + 1).fill(0);
+    randomData.forEach(value => {
+      if (value >= 0 && value <= n) {
+        counts[value]++;
+      }
+    });
+    
+    // 生成结果数据，y值表示每个x值出现的次数
+    return counts.map((count, x) => ({ x, y: count }));
   };
 
   const generatePoissonData = (): DataPoint[] => {
     const data: DataPoint[] = [];
-    for (let i = 0; i < sampleSize; i++) {
-      let k = 0;
-      let p = 1.0;
-      const L = Math.exp(-lambda);
-      while (p > L) {
-        k++;
-        p *= Math.random();
-      }
-      data.push({ x: k - 1, y: Math.random() });
+    // For Poisson distribution, generate enough k values to cover main probability mass
+    const maxK = Math.min(Math.ceil(lambda * 3), sampleSize);
+    
+    for (let k = 0; k <= maxK; k++) {
+      // Calculate y values using Poisson distribution probability mass function
+      const y = poissonDistribution(k, lambda);
+      data.push({ x: k, y });
     }
     return data;
   };
 
   const generateUniformData = (): DataPoint[] => {
     const data: DataPoint[] = [];
+    // Generate equally spaced x values
+    const step = (max - min) / (sampleSize - 1);
+    // Uniform distribution probability density function value
+    const uniformPDF = 1 / (max - min);
+    
     for (let i = 0; i < sampleSize; i++) {
-      const x = min + Math.random() * (max - min);
-      data.push({ x, y: Math.random() });
+      const x = min + i * step;
+      data.push({ x, y: uniformPDF });
     }
     return data;
   };
 
-  const handleGenerate = () => {
-    let data: DataPoint[] = [];
-    
-    switch (distributionType) {
-      case 'normal':
-        data = generateNormalData();
-        break;
-      case 'binomial':
-        data = generateBinomialData();
-        break;
-      case 'poisson':
-        data = generatePoissonData();
-        break;
-      case 'uniform':
-        data = generateUniformData();
-        break;
+  const handleGenerate = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Simulate processing time for better user experience
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      let data: DataPoint[] = [];
+      
+      switch (distributionType) {
+        case 'normal':
+          data = generateNormalData();
+          break;
+        case 'binomial':
+          data = generateBinomialData();
+          break;
+        case 'poisson':
+          data = generatePoissonData();
+          break;
+        case 'uniform':
+          data = generateUniformData();
+          break;
+      }
+      
+      onDataGenerated(data);
+      
+      // Update last generated timestamp
+      const now = new Date();
+      setLastGenerated(`${now.toLocaleDateString()} ${now.toLocaleTimeString()}`);
+    } catch (error) {
+      console.error('Error generating distribution data:', error);
+      alert('生成数据时发生错误，请检查参数设置。');
+    } finally {
+      setIsLoading(false);
     }
-    
-    onDataGenerated(data);
   };
 
   return (
     <div className="distribution-generator">
       <div className="distribution-selector">
-        <label>分布类型:</label>
+        <label>Distribution Type:</label>
         <select 
           value={distributionType} 
           onChange={(e) => setDistributionType(e.target.value as DistributionType)}
+          onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
           className="distribution-select"
+          title="Select distribution type"
         >
-          <option value="normal">正态分布</option>
-          <option value="binomial">二项分布</option>
-          <option value="poisson">泊松分布</option>
-          <option value="uniform">均匀分布</option>
+          <option value="normal">Normal Distribution</option>
+          <option value="binomial">Binomial Distribution</option>
+          <option value="poisson">Poisson Distribution</option>
+          <option value="uniform">Uniform Distribution</option>
         </select>
       </div>
 
       <div className="sample-size-control">
-        <label>样本大小: {sampleSize}</label>
+        <label>Sample Size: {sampleSize}</label>
         <ParameterSlider
           min={10}
           max={10000}
           value={sampleSize}
           onValueChange={setSampleSize}
           step={10}
+
         />
       </div>
 
       {distributionType === 'normal' && (
         <div className="distribution-params">
           <div className="param-group">
-            <label>均值: {mean.toFixed(2)}</label>
+            <label>Mean: {mean.toFixed(2)}</label>
             <ParameterSlider
-              min={-10}
-              max={10}
-              value={mean}
-              onValueChange={setMean}
-              step={0.1}
-            />
+            min={-10}
+            max={10}
+            value={mean}
+            onValueChange={setMean}
+            step={0.1}
+
+          />
           </div>
           <div className="param-group">
-            <label>标准差: {stdDev.toFixed(2)}</label>
+            <label>Standard Deviation: {stdDev.toFixed(2)}</label>
             <ParameterSlider
-              min={0.1}
-              max={10}
-              value={stdDev}
-              onValueChange={setStdDev}
-              step={0.1}
-            />
+            min={0.1}
+            max={10}
+            value={stdDev}
+            onValueChange={setStdDev}
+            step={0.1}
+
+          />
           </div>
         </div>
       )}
@@ -148,24 +218,26 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
       {distributionType === 'binomial' && (
         <div className="distribution-params">
           <div className="param-group">
-            <label>试验次数: {n}</label>
+            <label>Number of Trials: {n}</label>
             <ParameterSlider
-              min={1}
-              max={100}
-              value={n}
-              onValueChange={setN}
-              step={1}
-            />
+            min={1}
+            max={100}
+            value={n}
+            onValueChange={setN}
+            step={1}
+
+          />
           </div>
           <div className="param-group">
-            <label>成功概率: {p.toFixed(2)}</label>
+            <label>Success Probability: {p.toFixed(2)}</label>
             <ParameterSlider
-              min={0}
-              max={1}
-              value={p}
-              onValueChange={setP}
-              step={0.01}
-            />
+            min={0}
+            max={1}
+            value={p}
+            onValueChange={setP}
+            step={0.01}
+
+          />
           </div>
         </div>
       )}
@@ -173,14 +245,15 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
       {distributionType === 'poisson' && (
         <div className="distribution-params">
           <div className="param-group">
-            <label>λ值: {lambda.toFixed(2)}</label>
+            <label>Lambda (λ): {lambda.toFixed(2)}</label>
             <ParameterSlider
-              min={0.1}
-              max={20}
-              value={lambda}
-              onValueChange={setLambda}
-              step={0.1}
-            />
+            min={0.1}
+            max={20}
+            value={lambda}
+            onValueChange={setLambda}
+            step={0.1}
+
+          />
           </div>
         </div>
       )}
@@ -188,31 +261,45 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
       {distributionType === 'uniform' && (
         <div className="distribution-params">
           <div className="param-group">
-            <label>最小值: {min.toFixed(2)}</label>
+            <label>Minimum: {min.toFixed(2)}</label>
             <ParameterSlider
-              min={-10}
-              max={10}
-              value={min}
-              onValueChange={setMin}
-              step={0.1}
-            />
+            min={-10}
+            max={10}
+            value={min}
+            onValueChange={setMin}
+            step={0.1}
+
+          />
           </div>
           <div className="param-group">
-            <label>最大值: {max.toFixed(2)}</label>
+            <label>Maximum: {max.toFixed(2)}</label>
             <ParameterSlider
-              min={min + 0.1}
-              max={20}
-              value={max}
-              onValueChange={setMax}
-              step={0.1}
-            />
+            min={min + 0.1}
+            max={20}
+            value={max}
+            onValueChange={setMax}
+            step={0.1}
+
+          />
           </div>
         </div>
       )}
 
-      <button className="generate-button" onClick={handleGenerate}>
-        生成数据
+      <button 
+        type="button"
+        className={`generate-button ${isLoading ? 'loading' : ''}`}
+        onClick={handleGenerate}
+        disabled={isLoading}
+        data-tooltip="Generate data based on selected distribution type and parameters"
+      >
+        {isLoading ? 'Generating...' : 'Generate Data'}
       </button>
+      
+      {lastGenerated && (
+        <div className="last-generated-info" style={{ marginTop: '10px', fontSize: '12px', color: '#666', textAlign: 'center' }}>
+          Last generated: {lastGenerated}
+        </div>
+      )}
     </div>
   );
 };

@@ -5,10 +5,10 @@ export const getDistributions = (): Distribution[] => {
   return [
     {
       id: 'normal',
-      name: '正态分布',
+      name: 'Normal Distribution',
       formula: 'f(x) = (1/σ√(2π)) e^(-(x-μ)²/(2σ²))',
       parameters: { mean: 0, stdDev: 1 },
-      description: '正态分布是一种连续概率分布，呈钟形曲线，由均值(μ)和标准差(σ)决定。',
+      description: 'Normal distribution is a continuous probability distribution with a bell-shaped curve, determined by mean(μ) and standard deviation(σ).',
       generateData: (params, range, points) => {
         const { mean, stdDev } = params;
         const data: DistributionDataPoint[] = [];
@@ -24,10 +24,10 @@ export const getDistributions = (): Distribution[] => {
     },
     {
       id: 'binomial',
-      name: '二项分布',
+      name: 'Binomial Distribution',
       formula: 'P(k) = C(n,k) p^k (1-p)^(n-k)',
       parameters: { n: 10, p: 0.5 },
-      description: '二项分布表示在n次独立的是/非试验中成功k次的概率，每次试验成功的概率为p。',
+      description: 'Binomial distribution represents the probability of k successes in n independent yes/no trials, each with success probability p.',
       generateData: (params, _, points) => {
         const { n, p } = params;
         const data: DistributionDataPoint[] = [];
@@ -42,10 +42,10 @@ export const getDistributions = (): Distribution[] => {
     },
     {
       id: 'poisson',
-      name: '泊松分布',
+      name: 'Poisson Distribution',
       formula: 'P(k) = (λ^k e^(-λ)) / k!',
       parameters: { lambda: 2 },
-      description: '泊松分布表示在固定时间或空间内发生k次事件的概率，其中事件以已知的恒定速率λ发生。',
+      description: 'Poisson distribution represents the probability of k events occurring within a fixed time or space, where events happen at a known constant rate λ.',
       generateData: (params, _, points) => {
         const { lambda } = params;
         const data: DistributionDataPoint[] = [];

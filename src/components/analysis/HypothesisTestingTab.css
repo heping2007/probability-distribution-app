@@ -224,7 +224,7 @@
   font-size: 1.3rem;
 }
 
-/* 置信区间图表 */
+/* Confidence interval chart */
 .confidence-interval-chart {
   margin: 20px 0;
 }
@@ -282,7 +282,7 @@
   color: #6c757d;
 }
 
-/* p值比较 */
+/* p-value comparison */
 .p-value-comparison {
   display: flex;
   flex-direction: column;
@@ -342,7 +342,7 @@
   color: #27ae60;
 }
 
-/* 分布图表 */
+/* Distribution chart */
 .distribution-chart {
   margin: 20px 0;
   position: relative;
@@ -420,7 +420,7 @@
   color: #495057;
 }
 
-/* 详细统计信息 */
+/* Detailed statistics */
 .detailed-stats {
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -468,7 +468,7 @@
   font-size: 1.1rem;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .hypothesis-row {
     flex-direction: column;

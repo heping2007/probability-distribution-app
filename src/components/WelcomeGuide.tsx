@@ -85,7 +85,7 @@ const WelcomeGuide: React.FC<WelcomeGuideProps> = ({ onClose }) => {
   return (
     <div className="welcome-guide-overlay">
       <div className="welcome-guide-container">
-        <button className="welcome-guide-close" onClick={handleSkip}>
+        <button type="button" className="welcome-guide-close" onClick={handleSkip}>
           &times;
         </button>
         
@@ -109,17 +109,17 @@ const WelcomeGuide: React.FC<WelcomeGuideProps> = ({ onClose }) => {
           
           <div className="welcome-guide-buttons">
             {currentStep > 0 && (
-              <button className="previous-button" onClick={handlePrevious}>
+              <button type="button" className="previous-button" onClick={handlePrevious}>
                 Previous
               </button>
             )}
             
-            <button className="next-button" onClick={handleNext}>
+            <button type="button" className="next-button" onClick={handleNext}>
               {currentStep === steps.length - 1 ? 'Start Using App' : 'Next'}
             </button>
             
             {currentStep < steps.length - 1 && (
-              <button className="skip-button" onClick={handleSkip}>
+              <button type="button" className="skip-button" onClick={handleSkip}>
                 Skip
               </button>
             )}

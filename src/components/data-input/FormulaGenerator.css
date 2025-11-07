@@ -1,0 +1,402 @@
+.formula-generator {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* 标签样式 */
+.generator-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 10px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.tab-button.active {
+  background-color: #17a2b8;
+  color: white;
+  border-color: #17a2b8;
+}
+
+/* 生成器内容区域 */
+.generator-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 公式编辑器样式 */
+.formula-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formula-input-section label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.formula-input-section input[type="text"] {
+  padding: 10px 15px;
+  border: 2px solid #ced4da;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  background-color: white;
+}
+
+.formula-input-section input[type="text"]:focus {
+  outline: none;
+  border-color: #17a2b8;
+  box-shadow: 0 0 0 2px rgba(23, 162, 184, 0.25);
+}
+
+/* X范围选择器 */
+.x-range-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.x-range-section label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-inputs input[type="number"] {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.range-inputs span {
+  font-weight: 500;
+  color: #6c757d;
+}
+
+/* 函数按钮区域 */
+.function-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.function-buttons label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.function-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.function-button {
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  transition: all 0.2s ease;
+}
+
+.function-button:hover {
+  background-color: #17a2b8;
+  color: white;
+  border-color: #17a2b8;
+}
+
+/* 模式编辑器样式 */
+.pattern-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pattern-type-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pattern-type-section label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.pattern-type-section select {
+  padding: 10px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.pattern-type-section select:focus {
+  outline: none;
+  border-color: #17a2b8;
+  box-shadow: 0 0 0 2px rgba(23, 162, 184, 0.25);
+}
+
+/* 模式参数控件 */
+.pattern-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.param-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.param-control label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 13px;
+}
+
+.param-control input[type="range"] {
+  width: 100%;
+  margin: 5px 0;
+}
+
+.param-control span {
+  align-self: flex-end;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #17a2b8;
+  min-width: 50px;
+  text-align: right;
+}
+
+/* 点数控制 */
+.point-count-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.point-count-section label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.point-count-section input[type="range"] {
+  flex: 1;
+}
+
+.point-count-section span {
+  font-weight: 600;
+  color: #17a2b8;
+  min-width: 80px;
+}
+
+/* 生成器控制按钮 */
+.generator-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.generate-button,
+.use-data-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.generate-button {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.generate-button:hover:not(:disabled) {
+  background-color: #138496;
+}
+
+.generate-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.use-data-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.use-data-button:hover {
+  background-color: #218838;
+}
+
+/* 错误消息 */
+.error-message {
+  padding: 12px 15px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 预览数据 */
+.preview-data {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.preview-data h4 {
+  margin: 0 0 15px 0;
+  color: #495057;
+  font-size: 16px;
+}
+
+.data-table {
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.data-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+.data-table td {
+  font-family: 'Courier New', monospace;
+}
+
+.more-data {
+  text-align: center !important;
+  font-style: italic;
+  color: #6c757d;
+}
+
+.preview-data p {
+  margin: 10px 0 0 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .formula-generator {
+    padding: 15px;
+  }
+
+  .generator-tabs {
+    flex-direction: column;
+  }
+
+  .tab-button {
+    width: 100%;
+  }
+
+  .function-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .range-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .range-inputs input[type="number"] {
+    width: 100%;
+  }
+
+  .point-count-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .point-count-section label {
+    min-width: auto;
+  }
+
+  .generator-controls {
+    flex-direction: column;
+  }
+
+  .generate-button,
+  .use-data-button {
+    width: 100%;
+  }
+}

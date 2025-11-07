@@ -7,7 +7,7 @@ interface FormulaDisplayProps {
 const FormulaDisplay: React.FC<FormulaDisplayProps> = ({ formula }) => {
   return (
     <div className="formula-display">
-      <h4>数学公式:</h4>
+      <h4>Mathematical Formula:</h4>
       <div className="formula">{formula}</div>
     </div>
   );

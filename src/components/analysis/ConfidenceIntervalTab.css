@@ -23,7 +23,6 @@
   color: #333;
 }
 
-.confidence-select,
 .axis-select {
   padding: 8px 12px;
   border: 1px solid #ccc;
@@ -33,10 +32,85 @@
   cursor: pointer;
 }
 
-.confidence-select:focus,
 .axis-select:focus {
   outline: none;
   border-color: #2196f3;
+}
+
+/* 置信水平输入框样式 */
+.confidence-input-group {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.confidence-input {
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.confidence-input:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.confidence-input.error {
+  border-color: #f44336;
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+}
+
+.confidence-percent {
+  position: absolute;
+  right: 12px;
+  color: #666;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+/* 区间类型选择器样式 */
+.interval-type-radio {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.radio-option:hover {
+  background-color: #f5f5f5;
+}
+
+.radio-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.radio-option span {
+  font-size: 14px;
+  color: #333;
 }
 
 .interval-results {
@@ -228,7 +302,7 @@
   border: 1px dashed #ccc;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
   .confidence-interval-tab {
     padding: 15px;

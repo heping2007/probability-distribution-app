@@ -1,3 +1,35 @@
+/* 全局CSS变量定义 */
+:root {
+  /* 主色调 */
+  --primary-500: #10b981;
+  --primary-600: #059669;
+  
+  /* 分布类型品牌色 */
+  --normal-color: #3b82f6;
+  --uniform-color: #f59e0b;
+  --exponential-color: #ef4444;
+  --binomial-color: #8b5cf6;
+  --poisson-color: #06b6d4;
+  
+  /* 操作按钮颜色 */
+  --action-generate: #10b981;
+  --action-generate-hover: #059669;
+  --action-save: #f59e0b;
+  --action-save-hover: #d97706;
+  --action-reset: #ef4444;
+  --action-reset-hover: #dc2626;
+  --action-delete: #ef4444;
+  --action-delete-hover: #dc2626;
+  
+  /* 中性色 */
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+}
+
 body, html {
   margin: 0;
   padding: 0;
@@ -55,7 +87,55 @@ body, html {
 }
 
 .app-content {
-  margin-bottom: 30px;
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 数据集管理样式 */
+.dataset-management {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.dataset-controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+/* 数据集管理按钮现在使用新的按钮系统 */
+.dataset-new-btn {
+  composes: btn btn-action-generate;
+}
+
+.dataset-delete-btn {
+  composes: btn btn-action-delete;
+}
+
+.dataset-select {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+}
+
+.current-dataset-info {
+  font-size: 14px;
+  color: #4b5563;
+  margin-top: 10px;
 }
 
 .visualization-section {
@@ -77,16 +157,244 @@ body, html {
   border-top: 1px solid #ddd;
 }
 
-/* 通用样式 */
-button {
+/* 按钮基础样式 */
+.btn {
   font-family: inherit;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
 }
 
+/* 分布类型按钮样式 */
+.btn-distribution-normal {
+  background-color: var(--normal-color);
+  color: white;
+}
+
+.btn-distribution-normal:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-distribution-uniform {
+  background-color: var(--uniform-color);
+  color: white;
+}
+
+.btn-distribution-uniform:hover {
+  background-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-distribution-exponential {
+  background-color: var(--exponential-color);
+  color: white;
+}
+
+.btn-distribution-exponential:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-distribution-binomial {
+  background-color: var(--binomial-color);
+  color: white;
+}
+
+.btn-distribution-binomial:hover {
+  background-color: #7c3aed;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.btn-distribution-poisson {
+  background-color: var(--poisson-color);
+  color: white;
+}
+
+.btn-distribution-poisson:hover {
+  background-color: #0891b2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+/* 操作按钮样式 */
+.btn-action-generate {
+  background-color: var(--action-generate);
+  color: white;
+}
+
+.btn-action-generate:hover {
+  background-color: var(--action-generate-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-action-save {
+  background-color: var(--action-save);
+  color: white;
+}
+
+.btn-action-save:hover {
+  background-color: var(--action-save-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-action-reset {
+  background-color: var(--action-reset);
+  color: white;
+}
+
+.btn-action-reset:hover {
+  background-color: var(--action-reset-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-action-delete {
+  background-color: var(--action-delete);
+  color: white;
+}
+
+.btn-action-delete:hover:not(:disabled) {
+  background-color: var(--action-delete-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-action-delete:disabled {
+  background-color: var(--neutral-300);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 状态样式 */
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Loading State Styles */
+.btn.loading {
+  opacity: 0.7;
+  pointer-events: none;
+  position: relative;
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Focus State Styles */
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Select and Input Interaction States */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  transition: all 0.2s ease;
+}
+
+/* Select and Input Hover States */
+input:hover:not(:disabled),
+select:hover:not(:disabled),
+textarea:hover:not(:disabled) {
+  border-color: var(--neutral-300);
+}
+
+/* Checkbox and Radio Button Interaction States */
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  accent-color: var(--primary-500);
+}
+
+/* Tooltip Interaction */
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--neutral-800);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 5px;
+}
+
+.tooltip:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--neutral-800);
+  z-index: 1000;
+}
+
+/* Loading Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Other Common Styles */
 input, select, textarea {
   font-family: inherit;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .data-analysis-app {
     padding: 10px;
@@ -101,7 +409,7 @@ input, select, textarea {
   }
 }
 
-/* 动画效果 */
+/* Animation Effects */
 @keyframes fadeIn {
   from {
     opacity: 0;
