@@ -1,9 +1,9 @@
 /**
- * 计算两个样本均值差异的置信区间
- * @param sample1 第一个样本数据
- * @param sample2 第二个样本数据
- * @param confidenceLevel 置信水平 (0-1)
- * @returns 包含置信区间下限、上限和均值差异的对象
+ * Calculate confidence interval for the difference between two sample means
+ * @param sample1 First sample data
+ * @param sample2 Second sample data
+ * @param confidenceLevel Confidence level (0-1)
+ * @returns Object containing confidence interval lower bound, upper bound, and mean difference
  */
 export function calculateTwoSampleMeanDifferenceCI(
   sample1: number[],
@@ -41,7 +41,7 @@ export function calculateTwoSampleMeanDifferenceCI(
   const upperBound = meanDifference + marginOfError;
   
   // 生成解释文本
-  const interpretation = `我们有${confidenceLevel * 100}%的信心认为两个样本均值差异的真实值位于${lowerBound.toFixed(4)}和${upperBound.toFixed(4)}之间。`;
+  const interpretation = `We are ${confidenceLevel * 100}% confident that the true value of the difference between the two sample means lies between ${lowerBound.toFixed(4)} and ${upperBound.toFixed(4)}.`;
   
   return {
     lowerBound,

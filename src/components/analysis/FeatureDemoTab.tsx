@@ -289,27 +289,27 @@ const FeatureDemoTab: React.FC<FeatureDemoTabProps> = ({ }) => {
             </div>
             
             <div className="test-details">
-              <p><strong>Test Type:</strong> {hypothesisTestAnalysis['Test'] || hypothesisTestAnalysis['检验']}</p>
-              <p><strong>Description:</strong> {hypothesisTestAnalysis['Description'] || hypothesisTestAnalysis['说明']}</p>
+              <p><strong>Test Type:</strong> {hypothesisTestAnalysis['Test']}</p>
+          <p><strong>Description:</strong> {hypothesisTestAnalysis['Description']}</p>
               
               {selectedScenario === 'sameDistribution' && (
                 <div className="groups-comparison">
                   <div className="group-stats">
                     <h5>Group 1 Statistics</h5>
-                    <p>Mean: {hypothesisTestAnalysis['Group 1 Statistics']?.mean || hypothesisTestAnalysis['组1统计量']?.mean}</p>
-                    <p>Standard Deviation: {hypothesisTestAnalysis['Group 1 Statistics']?.std || hypothesisTestAnalysis['组1统计量']?.std}</p>
-                    <p>Sample Size: {hypothesisTestAnalysis['Group 1 Statistics']?.n || hypothesisTestAnalysis['组1统计量']?.n}</p>
+                    <p>Mean: {hypothesisTestAnalysis['Group 1 Statistics']?.mean}</p>
+          <p>Standard Deviation: {hypothesisTestAnalysis['Group 1 Statistics']?.std}</p>
+          <p>Sample Size: {hypothesisTestAnalysis['Group 1 Statistics']?.n}</p>
                   </div>
                   <div className="group-stats">
                     <h5>Group 2 Statistics</h5>
-                    <p>Mean: {hypothesisTestAnalysis['Group 2 Statistics']?.mean || hypothesisTestAnalysis['组2统计量']?.mean}</p>
-                    <p>Standard Deviation: {hypothesisTestAnalysis['Group 2 Statistics']?.std || hypothesisTestAnalysis['组2统计量']?.std}</p>
-                    <p>Sample Size: {hypothesisTestAnalysis['Group 2 Statistics']?.n || hypothesisTestAnalysis['组2统计量']?.n}</p>
+                    <p>Mean: {hypothesisTestAnalysis['Group 2 Statistics']?.mean}</p>
+          <p>Standard Deviation: {hypothesisTestAnalysis['Group 2 Statistics']?.std}</p>
+          <p>Sample Size: {hypothesisTestAnalysis['Group 2 Statistics']?.n}</p>
                   </div>
                   <div className="test-stats">
                     <h5>Test Results</h5>
-                    <p>t Statistic: {hypothesisTestAnalysis['t Statistic'] || hypothesisTestAnalysis['t统计量']}</p>
-                    <p>p Value: {hypothesisTestAnalysis['p Value'] || hypothesisTestAnalysis['p值']}</p>
+                    <p>t Statistic: {hypothesisTestAnalysis['t Statistic']}</p>
+          <p>p Value: {hypothesisTestAnalysis['p Value']}</p>
                   </div>
                 </div>
               )}
@@ -318,15 +318,15 @@ const FeatureDemoTab: React.FC<FeatureDemoTabProps> = ({ }) => {
                 <div className="distribution-comparison">
                   <div className="dist-stats">
                     <h5>Group 1 Distribution Features</h5>
-                    <p>{hypothesisTestAnalysis['组1分布特征']}</p>
+                    <p>{hypothesisTestAnalysis['Group 1 Distribution Features']}</p>
                   </div>
                   <div className="dist-stats">
                     <h5>Group 2 Distribution Features</h5>
-                    <p>{hypothesisTestAnalysis['组2分布特征']}</p>
+                    <p>{hypothesisTestAnalysis['Group 2 Distribution Features']}</p>
                   </div>
                   <div className="test-stats">
                     <h5>Test Results</h5>
-                    <p>KS Statistic: {hypothesisTestAnalysis['KS统计量']}</p>
+                    <p>KS Statistic: {hypothesisTestAnalysis['KS Statistic']}</p>
                   </div>
                 </div>
               )}
