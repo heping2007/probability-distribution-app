@@ -37,3 +37,11 @@ export const poissonDistribution = (
   if (k < 0 || lambda <= 0) return 0;
   return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
 };
+
+export const exponentialDistribution = (
+  x: number,
+  lambda: number
+): number => {
+  if (x < 0 || lambda <= 0) return 0;
+  return lambda * Math.exp(-lambda * x);
+};

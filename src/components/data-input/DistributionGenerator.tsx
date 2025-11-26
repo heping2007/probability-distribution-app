@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DataPoint } from '../DataAnalysisApp';
 import ParameterSlider from '../common/ParameterSlider';
-import { poissonDistribution } from '../../utils/mathUtils';
+import { poissonDistribution, exponentialDistribution } from '../../utils/mathUtils';
 import './DistributionGenerator.css';
 
 interface DistributionGeneratorProps {
   onDataGenerated: (data: DataPoint[]) => void;
 }
 
-type DistributionType = 'normal' | 'binomial' | 'poisson' | 'uniform';
+type DistributionType = 'normal' | 'binomial' | 'poisson' | 'uniform' | 'exponential';
 
-const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGenerated }) => {
+const DistributionGenerator = ({
+  onDataGenerated
+}: DistributionGeneratorProps) => {
   const [distributionType, setDistributionType] = useState<DistributionType>('normal');
   const [sampleSize, setSampleSize] = useState<number>(1000);
   
@@ -121,6 +123,19 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
     return data;
   };
 
+  const generateExponentialData = (): DataPoint[] => {
+    const data: DataPoint[] = [];
+    // Generate x values from 0 to reasonable range for exponential distribution
+    const xMax = Math.min(10 / lambda, 20); // Limit to reasonable range
+    
+    for (let i = 0; i < sampleSize; i++) {
+      const x = (i / (sampleSize - 1)) * xMax;
+      const y = exponentialDistribution(x, lambda);
+      data.push({ x, y });
+    }
+    return data;
+  };
+
   const handleGenerate = async () => {
     try {
       setIsLoading(true);
@@ -143,6 +158,9 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
         case 'uniform':
           data = generateUniformData();
           break;
+        case 'exponential':
+          data = generateExponentialData();
+          break;
       }
       
       onDataGenerated(data);
@@ -161,10 +179,13 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
   return (
     <div className="distribution-generator">
       <div className="distribution-selector">
-        <label>Distribution Type:</label>
+        <label>Distribution Type: </label>
         <select 
           value={distributionType} 
-          onChange={(e) => setDistributionType(e.target.value as DistributionType)}
+          onChange={(e) => {
+            console.log('Distribution type changed to:', e.target.value);
+            setDistributionType(e.target.value as DistributionType);
+          }}
           onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
           className="distribution-select"
           title="Select distribution type"
@@ -173,6 +194,7 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
           <option value="binomial">Binomial Distribution</option>
           <option value="poisson">Poisson Distribution</option>
           <option value="uniform">Uniform Distribution</option>
+          <option value="exponential">Exponential Distribution</option>
         </select>
       </div>
 
@@ -278,6 +300,22 @@ const DistributionGenerator: React.FC<DistributionGeneratorProps> = ({ onDataGen
             max={20}
             value={max}
             onValueChange={setMax}
+            step={0.1}
+
+          />
+          </div>
+        </div>
+      )}
+
+      {distributionType === 'exponential' && (
+        <div className="distribution-params">
+          <div className="param-group">
+            <label>Lambda (λ): {lambda.toFixed(2)}</label>
+            <ParameterSlider
+            min={0.1}
+            max={5}
+            value={lambda}
+            onValueChange={setLambda}
             step={0.1}
 
           />

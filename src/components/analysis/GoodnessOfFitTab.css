@@ -1,0 +1,350 @@
+.goodness-of-fit-tab {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.goodness-of-fit-tab h2 {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.goodness-of-fit-tab h3 {
+  color: #34495e;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.goodness-of-fit-tab h4 {
+  color: #2c3e50;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* 数据输入区域 */
+.data-input-section {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.input-methods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.manual-input {
+  width: 100%;
+}
+
+.manual-input label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.manual-input textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ced4da;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.manual-input textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.file-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-input label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.file-input input[type="file"] {
+  padding: 8px;
+  border: 2px solid #ced4da;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+}
+
+.file-input input[type="file"]:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* 错误和加载消息 */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.loading-message {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loading-message::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #0c5460;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 结果区域 */
+.results-section {
+  margin-bottom: 30px;
+}
+
+.recommendation {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.recommendation h4 {
+  color: white;
+  margin: 0 0 10px 0;
+  font-size: 1.3em;
+}
+
+.recommendation p {
+  margin: 0;
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+/* 结果表格 */
+.results-table {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.results-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.results-table th {
+  background: #34495e;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.results-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ecf0f1;
+  vertical-align: top;
+}
+
+.results-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.results-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.results-table tbody tr.recommended {
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  color: white;
+  font-weight: 600;
+}
+
+.results-table tbody tr.recommended:hover {
+  background: linear-gradient(135deg, #0984e3, #2d3436);
+}
+
+.results-table tbody tr.recommended td {
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+.recommended-badge {
+  background: #00b894;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Q-Q图区域 */
+.qq-plot-section {
+  margin-bottom: 30px;
+}
+
+.qq-plot-container {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.qq-plot-container h3 {
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.qq-plot-parameters {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.qq-plot-parameters h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.qq-plot-parameters div {
+  margin: 5px 0;
+  padding: 5px 0;
+  border-bottom: 1px solid #ecf0f1;
+  font-family: 'Courier New', monospace;
+  color: #2c3e50;
+}
+
+.qq-plot-parameters div:last-child {
+  border-bottom: none;
+}
+
+/* 解释说明区域 */
+.explanation-section {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.explanation-section h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.explanation-section ul {
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.explanation-section li {
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+.explanation-section strong {
+  color: #2c3e50;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .goodness-of-fit-tab {
+    padding: 15px;
+  }
+  
+  .input-methods {
+    grid-template-columns: 1fr;
+  }
+  
+  .results-table {
+    font-size: 0.9em;
+  }
+  
+  .results-table th,
+  .results-table td {
+    padding: 8px 10px;
+  }
+  
+  .qq-plot-container svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .recommendation {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .goodness-of-fit-tab h2 {
+    font-size: 1.4em;
+  }
+  
+  .goodness-of-fit-tab h3 {
+    font-size: 1.1em;
+  }
+  
+  .manual-input textarea {
+    font-size: 12px;
+  }
+  
+  .results-table th,
+  .results-table td {
+    padding: 6px 8px;
+    font-size: 0.8em;
+  }
+  
+  .recommended-badge {
+    font-size: 0.7em;
+    padding: 2px 6px;
+  }
+}

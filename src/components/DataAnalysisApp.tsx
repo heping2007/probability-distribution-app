@@ -5,6 +5,7 @@ import StatisticalAnalysisTab from './analysis/StatisticalAnalysisTab';
 import MLEMOMAnalysisTab from './analysis/MLEMOMAnalysisTab';
 import ConfidenceIntervalTab from './analysis/ConfidenceIntervalTab';
 import HypothesisTestingTab from './analysis/HypothesisTestingTab';
+import GoodnessOfFitTab from './analysis/GoodnessOfFitTab';
 // 移除统计特征板块导入
 import DataVisualization from './visualization/DataVisualization';
 import WelcomeGuide from './WelcomeGuide';
@@ -179,7 +180,8 @@ const DataAnalysisApp: React.FC = () => {
           { id: 'stats', label: 'Basic Statistics', disabled: currentData.length === 0 },
           { id: 'mlemom', label: 'MLE/MoM Analysis', disabled: currentData.length === 0 },
           { id: 'confidence', label: 'Confidence Intervals', disabled: currentData.length === 0 },
-          { id: 'hypothesis-testing', label: 'Hypothesis Testing', disabled: currentData.length === 0 }
+          { id: 'hypothesis-testing', label: 'Hypothesis Testing', disabled: currentData.length === 0 },
+          { id: 'goodness-of-fit', label: 'Goodness of Fit', disabled: currentData.length === 0 }
         ]}
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -287,6 +289,10 @@ const DataAnalysisApp: React.FC = () => {
         
         {activeTab === 'hypothesis-testing' && (
           <HypothesisTestingTab data={currentData} datasets={Array.from(datasets.values())} />
+        )}
+        
+        {activeTab === 'goodness-of-fit' && (
+          <GoodnessOfFitTab data={currentData} dataset={currentDataset} datasets={Array.from(datasets.values())} />
         )}
         {/* 移除统计特征板块组件 */}
       </div>

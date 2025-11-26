@@ -20,7 +20,8 @@ const DataInputTab: React.FC<DataInputTabProps> = ({ onDataGenerated }) => {
     normal: { mean: 0, stdDev: 1 },
     uniform: { min: 0, max: 1 },
     binomial: { n: 10, p: 0.5 },
-    poisson: { lambda: 1 }
+    poisson: { lambda: 1 },
+    exponential: { lambda: 1 }
   });
   const [sampleCount, setSampleCount] = useState<number>(100);
   // File input reference removed
@@ -50,27 +51,37 @@ const DataInputTab: React.FC<DataInputTabProps> = ({ onDataGenerated }) => {
       normal: 'Normal Distribution',
       uniform: 'Uniform Distribution',
       binomial: 'Binomial Distribution',
-      poisson: 'Poisson Distribution'
+      poisson: 'Poisson Distribution',
+      exponential: 'Exponential Distribution'
     };
     
     let data: DataPoint[] = [];
     switch (selectedDistribution) {
-      case 'normal':
+      case 'normal': {
         const { mean, stdDev } = distributionParameters.normal;
         data = generateNormalDistribution(mean, stdDev, sampleCount);
         break;
-      case 'uniform':
+      }
+      case 'uniform': {
         const { min, max } = distributionParameters.uniform;
         data = generateUniformDistribution(min, max, sampleCount);
         break;
-      case 'binomial':
+      }
+      case 'binomial': {
         const { n, p } = distributionParameters.binomial;
         data = generateBinomialDistribution(n, p, sampleCount);
         break;
-      case 'poisson':
+      }
+      case 'poisson': {
         const { lambda } = distributionParameters.poisson;
         data = generatePoissonDistribution(lambda, sampleCount);
         break;
+      }
+      case 'exponential': {
+        const { lambda } = distributionParameters.exponential;
+        data = generateExponentialDistribution(lambda, sampleCount);
+        break;
+      }
       default:
         data = [];
     }
@@ -142,6 +153,17 @@ const DataInputTab: React.FC<DataInputTabProps> = ({ onDataGenerated }) => {
         p *= Math.random();
       } while (p > Math.exp(-lambda));
       data.push({ x: i, y: k - 1 });
+    }
+    return data;
+  };
+
+  // Generate Exponential distribution data
+  const generateExponentialDistribution = (lambda: number, count: number): DataPoint[] => {
+    const data: DataPoint[] = [];
+    for (let i = 0; i < count; i++) {
+      const u = Math.random();
+      const value = -Math.log(1 - u) / lambda;
+      data.push({ x: i, y: value });
     }
     return data;
   };
@@ -264,7 +286,8 @@ const DataInputTab: React.FC<DataInputTabProps> = ({ onDataGenerated }) => {
                     normal: 'Normal Distribution',
                     uniform: 'Uniform Distribution',
                     binomial: 'Binomial Distribution',
-                    poisson: 'Poisson Distribution'
+                    poisson: 'Poisson Distribution',
+                    exponential: 'Exponential Distribution'
                   };
                   
                   switch (inputMethod) {
@@ -344,6 +367,13 @@ const DataInputTab: React.FC<DataInputTabProps> = ({ onDataGenerated }) => {
                   onClick={() => setSelectedDistribution('uniform')}
                 >
                   Uniform Distribution
+                </button>
+                <button
+                  type="button"
+                  className={`distribution-type-btn ${selectedDistribution === 'exponential' ? 'active' : ''}`}
+                  onClick={() => setSelectedDistribution('exponential')}
+                >
+                  Exponential Distribution
                 </button>
               </div>
             </div>

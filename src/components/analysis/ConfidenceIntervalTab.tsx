@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { DataPoint, Dataset } from '../DataAnalysisApp';
 import { calculateTwoSampleMeanDifferenceCI } from '../../utils/statistics';
 import './ConfidenceIntervalTab.css';
@@ -21,11 +21,18 @@ interface ConfidenceIntervalResult {
 
 const ConfidenceIntervalTab: React.FC<ConfidenceIntervalTabProps> = ({ data, datasets = [] }) => {
   const [confidenceLevel, setConfidenceLevel] = useState<number>(95);
+  const [significanceLevel, setSignificanceLevel] = useState<number>(5); // 显著性水平，默认5%
   const [selectedAxis, setSelectedAxis] = useState<'x' | 'y'>('y');
   const [intervalType, setIntervalType] = useState<'two-sided' | 'lower-only' | 'upper-only' | 'mean-difference'>('lower-only');
   const [selectedDataset1, setSelectedDataset1] = useState<string>('');
   const [selectedDataset2, setSelectedDataset2] = useState<string>('');
   const [error, setError] = useState<string>('');
+
+  // 同步置信水平和显著性水平
+  useEffect(() => {
+    const newSignificanceLevel = 100 - confidenceLevel;
+    setSignificanceLevel(newSignificanceLevel);
+  }, [confidenceLevel]);
 
   const handleConfidenceLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
@@ -42,6 +49,28 @@ const ConfidenceIntervalTab: React.FC<ConfidenceIntervalTabProps> = ({ data, dat
       setError('Confidence level must be between 80% and 99%');
     } else {
       setConfidenceLevel(value);
+    }
+  };
+
+  // 处理显著性水平变化
+  const handleSignificanceLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    // Clear previous error
+    setError('');
+    
+    // Validate input range
+    if (isNaN(value)) {
+      setError('Please enter a valid significance level');
+      return;
+    }
+    
+    if (value < 1 || value > 20) {
+      setError('Significance level must be between 1% and 20%');
+    } else {
+      setSignificanceLevel(value);
+      // 自动计算并设置对应的置信水平
+      const newConfidenceLevel = 100 - value;
+      setConfidenceLevel(newConfidenceLevel);
     }
   };
 
@@ -83,6 +112,24 @@ const ConfidenceIntervalTab: React.FC<ConfidenceIntervalTabProps> = ({ data, dat
               className={`confidence-input ${error ? 'error' : ''}`}
               min="80"
               max="99"
+              step="0.1"
+            />
+            <span className="confidence-percent">%</span>
+          </div>
+        </div>
+        
+        <div className="control-group">
+          <label htmlFor="significance-level">Significance Level:</label>
+          <div className="confidence-input-group">
+            <input
+              type="number"
+              id="significance-level"
+              value={significanceLevel}
+              onChange={handleSignificanceLevelChange}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+              className={`confidence-input ${error ? 'error' : ''}`}
+              min="1"
+              max="20"
               step="0.1"
             />
             <span className="confidence-percent">%</span>
@@ -288,20 +335,33 @@ function calculateConfidenceInterval(
   const stdError = stdDev / Math.sqrt(n);
 
   // Calculate critical value for standard normal distribution
-  let criticalValue: number;
-  switch (confidenceLevel) {
-    case 0.90:
-      criticalValue = intervalType === 'two-sided' ? 1.645 : 1.282;
-      break;
-    case 0.95:
-      criticalValue = intervalType === 'two-sided' ? 1.96 : 1.645;
-      break;
-    case 0.99:
-      criticalValue = intervalType === 'two-sided' ? 2.576 : 2.326;
-      break;
-    default:
-      criticalValue = intervalType === 'two-sided' ? 1.96 : 1.645; // Default 95%
-  }
+  // 使用更精确的方法计算任意置信水平的Z临界值
+  const calculateCriticalValue = (confLevel: number, type: 'two-sided' | 'lower-only' | 'upper-only'): number => {
+    // 近似的逆正态分布函数（Z值计算）
+    const inverseNormalCDF = (p: number): number => {
+      // 基于Abramowitz和Stegun的近似公式
+      const sign = p < 0.5 ? -1 : 1;
+      const q = Math.min(p, 1 - p); // 对称特性
+      const t = Math.sqrt(-2 * Math.log(q));
+      const x = t - (2.30753 + 0.27061 * t) / (1 + (0.99229 + 0.04481 * t) * t);
+      
+      // 应用修正
+      let z = x - (0.01608 * x + 0.002783) / (1 + (0.114 * x + 0.01998) * x);
+      return sign * z;
+    };
+    
+    if (type === 'two-sided') {
+      // 双侧检验，分配alpha到两侧
+      const alpha = 1 - confLevel;
+      return inverseNormalCDF(1 - alpha / 2);
+    } else {
+      // 单侧检验（上侧或下侧），alpha全部在一侧
+      const alpha = 1 - confLevel;
+      return inverseNormalCDF(1 - alpha);
+    }
+  };
+  
+  const criticalValue = calculateCriticalValue(confidenceLevel, intervalType);
 
   const marginOfError = criticalValue * stdError;
   let lowerBound: number;

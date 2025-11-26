@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ParameterControls.css';
 
 // 与父组件匹配的类型定义
-export type DistributionType = 'normal' | 'uniform' | 'binomial' | 'poisson';
+export type DistributionType = 'normal' | 'uniform' | 'binomial' | 'poisson' | 'exponential';
 
 interface ParameterControlsProps {
   distributionType: DistributionType;
@@ -22,7 +22,8 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
   const [max, setMax] = useState(1);
   const [n, setN] = useState(10); // 二项分布参数
   const [p, setP] = useState(0.5); // 二项分布参数
-  const [lambda, setLambda] = useState(1); // 泊松分布参数
+  const [poissonLambda, setPoissonLambda] = useState(1); // 泊松分布参数
+  const [exponentialLambda, setExponentialLambda] = useState(1); // 指数分布参数
 
   // 简单的事件处理函数
   const handleMeanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,9 +78,17 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
   // 泊松分布参数处理
   const handleLambdaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(0.1, parseFloat(e.target.value));
-    setLambda(value);
+    setPoissonLambda(value);
     // 直接通知父组件
     onParametersChange('poisson', { lambda: value });
+  };
+
+  // 指数分布参数处理
+  const handleExponentialLambdaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(0.1, parseFloat(e.target.value));
+    setExponentialLambda(value);
+    // 直接通知父组件
+    onParametersChange('exponential', { lambda: value });
   };
 
   // 单独的应用按钮处理
@@ -106,9 +115,14 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
         onParametersChange('binomial', { n: validN, p: validP });
         break;
       case 'poisson':
-        const validLambda = Math.max(0.1, lambda);
-        setLambda(validLambda);
-        onParametersChange('poisson', { lambda: validLambda });
+        const validPoissonLambda = Math.max(0.1, poissonLambda);
+        setPoissonLambda(validPoissonLambda);
+        onParametersChange('poisson', { lambda: validPoissonLambda });
+        break;
+      case 'exponential':
+        const validExponentialLambda = Math.max(0.1, exponentialLambda);
+        setExponentialLambda(validExponentialLambda);
+        onParametersChange('exponential', { lambda: validExponentialLambda });
         break;
     }
     
@@ -266,22 +280,48 @@ const ParameterControls: React.FC<ParameterControlsProps> = ({
       {distributionType === 'poisson' && (
         <div className="parameter-group">
           <div className="parameter-item">
-            <label>Lambda (λ): {lambda}</label>
+            <label>Lambda (λ): {poissonLambda}</label>
             <input 
               type="range" 
               min={0.1} 
               max={20} 
               step={0.1} 
-              value={lambda} 
+              value={poissonLambda} 
               onChange={handleLambdaChange} 
               className="slider"
             />
             <input 
               type="number" 
-              value={lambda} 
+              value={poissonLambda} 
               onChange={handleLambdaChange} 
               min={0.1} 
               max={20} 
+              step={0.1} 
+              className="number-input"
+            />
+          </div>
+        </div>
+      )}
+      
+      {distributionType === 'exponential' && (
+        <div className="parameter-group">
+          <div className="parameter-item">
+            <label>Lambda (λ): {exponentialLambda}</label>
+            <input 
+              type="range" 
+              min={0.1} 
+              max={10} 
+              step={0.1} 
+              value={exponentialLambda} 
+              onChange={handleExponentialLambdaChange} 
+              className="slider"
+            />
+            <input 
+              type="number" 
+              value={exponentialLambda} 
+              onChange={handleExponentialLambdaChange} 
+              min={0.1} 
+              max={10} 
               step={0.1} 
               className="number-input"
             />

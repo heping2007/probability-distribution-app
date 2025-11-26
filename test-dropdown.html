@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribution Dropdown Test</title>
+</head>
+<body>
+    <h2>Distribution Dropdown Test</h2>
+    
+    <label>Distribution Type: </label>
+    <select id="test-select" className="distribution-select">
+        <option value="normal">Normal Distribution</option>
+        <option value="binomial">Binomial Distribution</option>
+        <option value="poisson">Poisson Distribution</option>
+        <option value="uniform">Uniform Distribution</option>
+        <option value="exponential">Exponential Distribution</option>
+    </select>
+    
+    <div style="margin-top: 20px;">
+        <h3>Current Value: <span id="current-value"></span></h3>
+        <p>Please check if "Exponential Distribution" option is visible in the dropdown above.</p>
+    </div>
+
+    <script>
+        const select = document.getElementById('test-select');
+        const currentValue = document.getElementById('current-value');
+        
+        select.addEventListener('change', function() {
+            currentValue.textContent = this.value;
+            console.log('Selected:', this.value);
+        });
+        
+        // Check all options
+        console.log('Available options:');
+        for (let option of select.options) {
+            console.log(`- ${option.value}: ${option.text}`);
+        }
+    </script>
+</body>
+</html>

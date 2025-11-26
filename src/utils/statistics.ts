@@ -32,8 +32,24 @@ export function calculateTwoSampleMeanDifferenceCI(
   // 计算标准误
   const stdError = Math.sqrt(variance1 / sample1.length + variance2 / sample2.length);
   
-  // 计算t临界值 (使用简化的Z临界值近似，实际应用中应使用t分布)
-  const zCritical = 1.96; // 95%置信水平的Z临界值，可根据需要调整
+  // 计算Z临界值
+  const calculateZCritical = (confLevel: number): number => {
+    // 近似的逆正态分布函数
+    const inverseNormalCDF = (p: number): number => {
+      const sign = p < 0.5 ? -1 : 1;
+      const q = Math.min(p, 1 - p);
+      const t = Math.sqrt(-2 * Math.log(q));
+      const x = t - (2.30753 + 0.27061 * t) / (1 + (0.99229 + 0.04481 * t) * t);
+      let z = x - (0.01608 * x + 0.002783) / (1 + (0.114 * x + 0.01998) * x);
+      return sign * z;
+    };
+    
+    // 双侧检验，分配alpha到两侧
+    const alpha = 1 - confLevel;
+    return inverseNormalCDF(1 - alpha / 2);
+  };
+  
+  const zCritical = calculateZCritical(confidenceLevel);
   
   // 计算置信区间
   const marginOfError = zCritical * stdError;

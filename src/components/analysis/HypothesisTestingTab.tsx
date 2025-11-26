@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataPoint, Dataset } from '../DataAnalysisApp';
 import './HypothesisTestingTab.css';
 
@@ -20,7 +20,50 @@ interface HypothesisTestResult {
   conclusion: string;
   interpretation: string;
   rejectionRegion: [number, number];
+  // 添加功效函数相关字段
+  powerData?: { mean: number; power: number }[];
+  actualPower?: number;
 }
+
+// 添加功效函数图表的CSS样式
+const styles = `
+.power-function-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.power-chart-container {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.power-interpretation {
+  background-color: #f0f7ff;
+  border-left: 4px solid #2196F3;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.power-interpretation h5 {
+  margin-top: 0;
+  color: #1565C0;
+  font-size: 16px;
+}
+
+.power-interpretation p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.power-interpretation p:last-child {
+  margin-bottom: 0;
+}
+`;
 
 const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datasets = [] }) => {
   const [hypothesisMean, setHypothesisMean] = useState<number>(10);
@@ -31,11 +74,12 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
   const [selectedDataset1, setSelectedDataset1] = useState<string>('');
   const [selectedDataset2, setSelectedDataset2] = useState<string>('');
   const [assumeEqualVariances, setAssumeEqualVariances] = useState<boolean>(true);
+  const [alternativeType, setAlternativeType] = useState<'two-sided' | 'greater' | 'less'>('two-sided');
 
   const handleTest = () => {
     if (testType === 'single-sample') {
       if (data.length === 0) return;
-      const result = performHypothesisTest(data, hypothesisMean, significanceLevel, selectedAxis);
+      const result = performHypothesisTest(data, hypothesisMean, significanceLevel, selectedAxis, alternativeType);
       setTestResult(result);
     } else {
       // 双样本t检验
@@ -52,7 +96,8 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
         dataset2.data, 
         significanceLevel, 
         selectedAxis,
-        assumeEqualVariances
+        assumeEqualVariances,
+        alternativeType
       );
       setTestResult(result);
     }
@@ -71,6 +116,22 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
       setSignificanceLevel(value);
     }
   };
+
+  // 将样式添加到DOM中
+  useEffect(() => {
+    if (!document.getElementById('power-chart-styles')) {
+      const styleElement = document.createElement('style');
+      styleElement.id = 'power-chart-styles';
+      styleElement.textContent = styles;
+      document.head.appendChild(styleElement);
+    }
+    return () => {
+      const styleElement = document.getElementById('power-chart-styles');
+      if (styleElement) {
+        styleElement.remove();
+      }
+    };
+  }, []);
 
   return (
     <div className="hypothesis-testing-tab">
@@ -205,8 +266,43 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
 
               <div className="hypothesis-item">
                 <label>Alternative Hypothesis (H₁):</label>
-                <div className="hypothesis-display">
-                  μ ≠ {hypothesisMean}
+                <div className="alternative-selector">
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="alternative-type"
+                      value="two-sided"
+                      checked={alternativeType === 'two-sided'}
+                      onChange={(e) => setAlternativeType(e.target.value as 'two-sided' | 'greater' | 'less')}
+                      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                      title="Two-sided test: H₁: μ ≠ μ₀"
+                    />
+                    <span>μ ≠ {hypothesisMean}</span>
+                  </label>
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="alternative-type"
+                      value="greater"
+                      checked={alternativeType === 'greater'}
+                      onChange={(e) => setAlternativeType(e.target.value as 'two-sided' | 'greater' | 'less')}
+                      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                      title="One-sided test: H₁: μ > μ₀"
+                    />
+                    <span>μ &gt; {hypothesisMean}</span>
+                  </label>
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="alternative-type"
+                      value="less"
+                      checked={alternativeType === 'less'}
+                      onChange={(e) => setAlternativeType(e.target.value as 'two-sided' | 'greater' | 'less')}
+                      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                      title="One-sided test: H₁: μ < μ₀"
+                    />
+                    <span>μ &lt; {hypothesisMean}</span>
+                  </label>
                 </div>
               </div>
             </div>
@@ -221,8 +317,43 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
 
               <div className="hypothesis-item">
                 <label>Alternative Hypothesis (H₁):</label>
-                <div className="hypothesis-display">
-                  μ₁ ≠ μ₂ (Means are different)
+                <div className="alternative-selector">
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="alternative-type"
+                      value="two-sided"
+                      checked={alternativeType === 'two-sided'}
+                      onChange={(e) => setAlternativeType(e.target.value as 'two-sided' | 'greater' | 'less')}
+                      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                      title="Two-sided test: H₁: μ₁ ≠ μ₂"
+                    />
+                    <span>μ₁ ≠ μ₂</span>
+                  </label>
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="alternative-type"
+                      value="greater"
+                      checked={alternativeType === 'greater'}
+                      onChange={(e) => setAlternativeType(e.target.value as 'two-sided' | 'greater' | 'less')}
+                      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                      title="One-sided test: H₁: μ₁ > μ₂"
+                    />
+                    <span>μ₁ &gt; μ₂</span>
+                  </label>
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="alternative-type"
+                      value="less"
+                      checked={alternativeType === 'less'}
+                      onChange={(e) => setAlternativeType(e.target.value as 'two-sided' | 'greater' | 'less')}
+                      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                      title="One-sided test: H₁: μ₁ < μ₂"
+                    />
+                    <span>μ₁ &lt; μ₂</span>
+                  </label>
                 </div>
               </div>
             </div>
@@ -303,7 +434,7 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
             <div className="p-value-comparison">
               <div className="value-item">
                 <span className="value-label">Calculated p-value:</span>
-                <span className="p-value">{testResult.pValue.toFixed(6)}</span>
+                <span className="p-value">{formatPValue(testResult.pValue)}</span>
               </div>
               <div className="value-item">
                 <span className="value-label">Significance level α:</span>
@@ -372,6 +503,123 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
               </div>
             </div>
           </div>
+          
+          {/* 功效函数图表 */}
+          {testResult.powerData && testResult.actualPower !== undefined && (
+            <div className="result-method">
+              <h4>Power Function Analysis</h4>
+              <div className="power-function-chart">
+                <div className="power-chart-container">
+                  <svg width="100%" height="300">
+                    {/* X轴 */}
+                    <line x1="50" y1="250" x2="450" y2="250" stroke="#333" />
+                    <text x="250" y="290" textAnchor="middle" fontSize="14">Effect Size (真实均值 - 原假设均值)</text>
+                    
+                    {/* Y轴 */}
+                    <line x1="50" y1="50" x2="50" y2="250" stroke="#333" />
+                    <text x="20" y="150" textAnchor="middle" fontSize="14" transform="rotate(-90, 20, 150)">Power</text>
+                    
+                    {/* 刻度线 */}
+                    {/* X轴刻度 - 强制对称化显示 */}
+                    {(() => {
+                      const data = testResult.powerData;
+                      const midIndex = Math.floor(data.length / 2);
+                      const quarterIndex = Math.floor(midIndex / 2);
+                      const tickIndices = [0, quarterIndex, midIndex, midIndex + quarterIndex, data.length - 1];
+                      
+                      return tickIndices.map((dataIndex, i) => {
+                        const x = 50 + (dataIndex / (data.length - 1)) * 400;
+                        const value = data[dataIndex].mean;
+                        return (
+                          <g key={`x-tick-${i}`}>
+                            <line x1={x} y1="250" x2={x} y2="255" stroke="#333" />
+                            <text x={x} y="275" textAnchor="middle" fontSize="10">{value.toFixed(2)}</text>
+                          </g>
+                        );
+                      });
+                    })()}
+                    
+                    {/* Y轴刻度 */}
+                    {[0, 0.2, 0.4, 0.6, 0.8, 1].map((value, i) => {
+                      const y = 250 - value * 200;
+                      return (
+                        <g key={`y-tick-${i}`}>
+                          <line x1="45" y1={y} x2="50" y2={y} stroke="#333" />
+                          <text x="40" y={y + 5} textAnchor="end" fontSize="10">{value}</text>
+                        </g>
+                      );
+                    })}
+                    
+                    {/* 功效函数曲线 */}
+                    <path
+                      d={testResult.powerData.map((point, i) => {
+                        const x = 50 + (i / (testResult.powerData!.length - 1)) * 400;
+                        const y = 250 - point.power * 200;
+                        return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+                      }).join(' ')}
+                      fill="none"
+                      stroke="#2196F3"
+                      strokeWidth="2"
+                    />
+                    
+                    {/* 假设均值标记（在效应大小坐标中为0） */}
+                    <g>
+                      <line
+                        x1={50 + ((0 - testResult.powerData![0].mean) / 
+                               (testResult.powerData![testResult.powerData!.length - 1].mean - testResult.powerData![0].mean)) * 400}
+                        y1="50"
+                        x2={50 + ((0 - testResult.powerData![0].mean) / 
+                               (testResult.powerData![testResult.powerData!.length - 1].mean - testResult.powerData![0].mean)) * 400}
+                        y2="250"
+                        stroke="#FF9800"
+                        strokeDasharray="5,5"
+                      />
+                      <text
+                        x={50 + ((0 - testResult.powerData![0].mean) / 
+                               (testResult.powerData![testResult.powerData!.length - 1].mean - testResult.powerData![0].mean)) * 400}
+                        y="40"
+                        textAnchor="middle"
+                        fontSize="12"
+                        fill="#FF9800"
+                      >
+                        H₀ (0)
+                      </text>
+                    </g>
+                    
+                    {/* 样本均值点（效应大小：sampleMean - hypothesisMean） */}
+                    <g>
+                      <circle
+                        cx={50 + (((testResult.sampleMean - testResult.hypothesisMean) - testResult.powerData![0].mean) / 
+                               (testResult.powerData![testResult.powerData!.length - 1].mean - testResult.powerData![0].mean)) * 400}
+                        cy={250 - testResult.actualPower! * 200}
+                        r="5"
+                        fill="#4CAF50"
+                      />
+                      <text
+                        x={50 + (((testResult.sampleMean - testResult.hypothesisMean) - testResult.powerData![0].mean) / 
+                               (testResult.powerData![testResult.powerData!.length - 1].mean - testResult.powerData![0].mean)) * 400}
+                        y={250 - testResult.actualPower! * 200 - 10}
+                        textAnchor="middle"
+                        fontSize="12"
+                        fill="#4CAF50"
+                      >
+                        Power: {testResult.actualPower!.toFixed(4)}
+                      </text>
+                    </g>
+                  </svg>
+                </div>
+                <div className="power-interpretation">
+                  <h5>Interpretation</h5>
+                  <p>
+                    The power of the test is {testResult.actualPower!.toFixed(4)}, which means there is a {testResult.actualPower! * 100}% chance of correctly rejecting the null hypothesis when the alternative hypothesis is true (at the observed mean difference).
+                  </p>
+                  <p>
+                    The power function shows how the test's power changes as the true population mean varies from the hypothesized mean (μ₀).
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -384,7 +632,7 @@ const HypothesisTestingTab: React.FC<HypothesisTestingTabProps> = ({ data, datas
   );
 };
 
-function performHypothesisTest(data: DataPoint[], hypothesisMean: number, significanceLevel: number, axis: 'x' | 'y'): HypothesisTestResult {
+function performHypothesisTest(data: DataPoint[], hypothesisMean: number, significanceLevel: number, axis: 'x' | 'y', alternativeType: 'two-sided' | 'greater' | 'less' = 'two-sided'): HypothesisTestResult {
   const values = data.map(point => point[axis]).filter(val => !isNaN(val));
   const n = values.length;
   const sampleMean = values.reduce((sum, val) => sum + val, 0) / n;
@@ -395,13 +643,27 @@ function performHypothesisTest(data: DataPoint[], hypothesisMean: number, signif
   // Calculate t-statistic
   const testStatistic = (sampleMean - hypothesisMean) / standardError;
 
-  // Calculate p-value (two-tailed test)
-  // Using normal distribution approximation for p-value
-  const pValue = 2 * (1 - normalCDF(Math.abs(testStatistic)));
+  // Calculate p-value based on alternative hypothesis
+  let pValue: number;
+  let criticalValue: number;
+  let rejectionRegion: [number, number];
 
-  // Calculate critical value (two-tailed test)
-  const criticalValue = inverseNormalCDF(1 - significanceLevel / 2);
-  const rejectionRegion: [number, number] = [-criticalValue, criticalValue];
+  if (alternativeType === 'two-sided') {
+    // 双侧检验：p-value = 2 * P(|Z| > |t|)
+    pValue = 2 * (1 - normalCDF(Math.abs(testStatistic)));
+    criticalValue = inverseNormalCDF(1 - significanceLevel / 2);
+    rejectionRegion = [-criticalValue, criticalValue];
+  } else if (alternativeType === 'greater') {
+    // 单侧检验（右侧）：p-value = P(Z > t)
+    pValue = 1 - normalCDF(testStatistic);
+    criticalValue = inverseNormalCDF(1 - significanceLevel);
+    rejectionRegion = [criticalValue, Infinity];
+  } else { // 'less'
+    // 单侧检验（左侧）：p-value = P(Z < t)
+    pValue = normalCDF(testStatistic);
+    criticalValue = inverseNormalCDF(significanceLevel);
+    rejectionRegion = [-Infinity, criticalValue];
+  }
 
   // Calculate confidence interval
   const marginOfError = criticalValue * standardError;
@@ -413,16 +675,37 @@ function performHypothesisTest(data: DataPoint[], hypothesisMean: number, signif
   // Decision
   const rejectNull = pValue < significanceLevel;
 
-  // Generate conclusion
-  const conclusion = rejectNull 
-    ? `At α=${significanceLevel} level, we reject the null hypothesis H₀. Because p-value(${pValue.toFixed(6)}) < α(${significanceLevel}).`
-    : `At α=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀. Because p-value(${pValue.toFixed(6)}) ≥ α(${significanceLevel}).`;
+  // Generate conclusion based on alternative hypothesis
+  let conclusion: string;
+  let interpretation: string;
+  
+  if (alternativeType === 'two-sided') {
+    conclusion = rejectNull 
+      ? `At α=${significanceLevel} level, we reject the null hypothesis H₀. Because p-value(${formatPValue(pValue)}) < α(${significanceLevel}).`
+      : `At α=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀. Because p-value(${formatPValue(pValue)}) ≥ α(${significanceLevel}).`;
+    interpretation = rejectNull
+      ? `There is evidence that the population mean is not equal to ${hypothesisMean}.`
+      : `There is not enough evidence to conclude that the population mean is different from ${hypothesisMean}.`;
+  } else if (alternativeType === 'greater') {
+    conclusion = rejectNull 
+      ? `At α=${significanceLevel} level, we reject the null hypothesis H₀. Because p-value(${formatPValue(pValue)}) < α(${significanceLevel}).`
+      : `At α=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀. Because p-value(${formatPValue(pValue)}) ≥ α(${significanceLevel}).`;
+    interpretation = rejectNull
+      ? `There is evidence that the population mean is greater than ${hypothesisMean}.`
+      : `There is not enough evidence to conclude that the population mean is greater than ${hypothesisMean}.`;
+  } else { // 'less'
+    conclusion = rejectNull 
+      ? `At α=${significanceLevel} level, we reject the null hypothesis H₀. Because p-value(${formatPValue(pValue)}) < α(${significanceLevel}).`
+      : `At α=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀. Because p-value(${formatPValue(pValue)}) ≥ α(${significanceLevel}).`;
+    interpretation = rejectNull
+      ? `There is evidence that the population mean is less than ${hypothesisMean}.`
+      : `There is not enough evidence to conclude that the population mean is less than ${hypothesisMean}.`;
+  }
 
-  // Interpretation
-  const interpretation = rejectNull
-    ? `There is evidence that the population mean is not equal to ${hypothesisMean}.`
-    : `There is not enough evidence to conclude that the population mean is different from ${hypothesisMean}.`;
-
+  // 生成功效函数数据（根据备择假设类型）
+  const powerData = generatePowerData(hypothesisMean, sampleStdDev, n, significanceLevel, alternativeType);
+  const actualPower = calculatePowerFunction(hypothesisMean, sampleStdDev, n, significanceLevel, sampleMean, alternativeType);
+  
   return {
     hypothesisMean,
     sampleMean,
@@ -435,7 +718,9 @@ function performHypothesisTest(data: DataPoint[], hypothesisMean: number, signif
     rejectNull,
     conclusion,
     interpretation,
-    rejectionRegion
+    rejectionRegion,
+    powerData,
+    actualPower
   };
 }
 
@@ -445,7 +730,8 @@ function performTwoSampleTTest(
   dataset2: DataPoint[],
   significanceLevel: number,
   axis: 'x' | 'y',
-  assumeEqualVariances: boolean
+  assumeEqualVariances: boolean,
+  alternativeType: 'two-sided' | 'greater' | 'less' = 'two-sided'
 ): HypothesisTestResult {
   // Extract values from selected axis
   const values1 = dataset1.map(point => point[axis]).filter(val => !isNaN(val));
@@ -477,12 +763,27 @@ function performTwoSampleTTest(
   // Calculate t-statistic (difference in means)
   const testStatistic = (mean1 - mean2) / standardError;
   
-  // Calculate p-value (two-tailed test)
-  const pValue = 2 * (1 - normalCDF(Math.abs(testStatistic)));
-  
-  // Calculate critical value (two-tailed test)
-  const criticalValue = inverseNormalCDF(1 - significanceLevel / 2);
-  const rejectionRegion: [number, number] = [-criticalValue, criticalValue];
+  // Calculate p-value and critical value based on alternative hypothesis
+  let pValue: number;
+  let criticalValue: number;
+  let rejectionRegion: [number, number];
+
+  if (alternativeType === 'two-sided') {
+    // 双侧检验：p-value = 2 * P(|Z| > |t|)
+    pValue = 2 * (1 - normalCDF(Math.abs(testStatistic)));
+    criticalValue = inverseNormalCDF(1 - significanceLevel / 2);
+    rejectionRegion = [-criticalValue, criticalValue];
+  } else if (alternativeType === 'greater') {
+    // 单侧检验（右侧）：p-value = P(Z > t)
+    pValue = 1 - normalCDF(testStatistic);
+    criticalValue = inverseNormalCDF(1 - significanceLevel);
+    rejectionRegion = [criticalValue, Infinity];
+  } else { // 'less'
+    // 单侧检验（左侧）：p-value = P(Z < t)
+    pValue = normalCDF(testStatistic);
+    criticalValue = inverseNormalCDF(significanceLevel);
+    rejectionRegion = [-Infinity, criticalValue];
+  }
   
   // Calculate confidence interval for the difference
   const marginOfError = criticalValue * standardError;
@@ -494,15 +795,39 @@ function performTwoSampleTTest(
   // Decision
   const rejectNull = pValue < significanceLevel;
   
-  // Generate conclusion
-  const conclusion = rejectNull 
-    ? `At α=${significanceLevel} level, we reject the null hypothesis H₀. Because p-value(${pValue.toFixed(6)}) < α(${significanceLevel}).`
-    : `At α=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀. Because p-value(${pValue.toFixed(6)}) ≥ α(${significanceLevel}).`;
+  // Generate conclusion based on alternative hypothesis
+  let conclusion: string;
+  let interpretation: string;
   
-  // Interpretation
-  const interpretation = rejectNull
-    ? `There is evidence that the means of the two populations are different. Mean difference: ${(mean1 - mean2).toFixed(4)}`
-    : `There is not enough evidence to conclude that the means of the two populations are different. Mean difference: ${(mean1 - mean2).toFixed(4)}`;
+  if (alternativeType === 'two-sided') {
+    conclusion = rejectNull
+      ? `At 伪=${significanceLevel} level, we reject the null hypothesis H₀: μ₁ = μ₂. Because p-value(${formatPValue(pValue)}) < 伪(${significanceLevel}).`
+      : `At 伪=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀: μ₁ = μ₂. Because p-value(${formatPValue(pValue)}) ≥ 伪(${significanceLevel}).`;
+    
+    interpretation = rejectNull
+      ? `There is evidence that the means of the two populations are different. Mean difference: ${(mean1 - mean2).toFixed(4)}`
+      : `There is not enough evidence to conclude that the means of the two populations are different. Mean difference: ${(mean1 - mean2).toFixed(4)}`;
+  } else if (alternativeType === 'greater') {
+    conclusion = rejectNull
+      ? `At 伪=${significanceLevel} level, we reject the null hypothesis H₀: μ₁ ≤ μ₂. Because p-value(${formatPValue(pValue)}) < 伪(${significanceLevel}).`
+      : `At 伪=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀: μ₁ ≤ μ₂. Because p-value(${formatPValue(pValue)}) ≥ 伪(${significanceLevel}).`;
+    
+    interpretation = rejectNull
+      ? `There is evidence that the mean of population 1 is greater than the mean of population 2. Mean difference: ${(mean1 - mean2).toFixed(4)}`
+      : `There is not enough evidence to conclude that the mean of population 1 is greater than the mean of population 2. Mean difference: ${(mean1 - mean2).toFixed(4)}`;
+  } else {
+    conclusion = rejectNull
+      ? `At 伪=${significanceLevel} level, we reject the null hypothesis H₀: μ₁ ≥ μ₂. Because p-value(${formatPValue(pValue)}) < 伪(${significanceLevel}).`
+      : `At 伪=${significanceLevel} level, we do not have enough evidence to reject the null hypothesis H₀: μ₁ ≥ μ₂. Because p-value(${formatPValue(pValue)}) ≥ 伪(${significanceLevel}).`;
+    
+    interpretation = rejectNull
+      ? `There is evidence that the mean of population 1 is less than the mean of population 2. Mean difference: ${(mean1 - mean2).toFixed(4)}`
+      : `There is not enough evidence to conclude that the mean of population 1 is less than the mean of population 2. Mean difference: ${(mean1 - mean2).toFixed(4)}`;
+  }
+
+  // 生成功效函数数据（对于双样本检验，假设均值为0，实际均值为均值差
+  const powerData = generatePowerData(0, standardError, Math.min(n1, n2), significanceLevel, alternativeType);
+  const actualPower = calculatePowerFunction(0, standardError, Math.min(n1, n2), significanceLevel, mean1 - mean2, alternativeType);
   
   return {
     hypothesisMean: 0, // For two-sample test, H₀: μ₁ - μ₂ = 0
@@ -516,16 +841,48 @@ function performTwoSampleTTest(
     rejectNull,
     conclusion,
     interpretation,
-    rejectionRegion
+    rejectionRegion,
+    powerData,
+    actualPower
   };
 }
 
-// Approximate standard normal CDF
+// 格式化p值的辅助函数
+function formatPValue(pValue: number): string {
+  if (pValue < 0.000001) {
+    return '< 0.000001';
+  } else if (pValue > 0.999999) {
+    return '> 0.999999';
+  } else {
+    // 对于中间值，保留6位小数
+    return pValue.toFixed(6);
+  }
+}
+
+// 更精确的标准正态分布CDF实现
 function normalCDF(x: number): number {
-  const t = 1 / (1 + 0.2316419 * Math.abs(x));
-  const d = 0.3989423 * Math.exp(-x * x / 2);
-  const prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
-  return x > 0 ? 1 - prob : prob;
+  // 对于极端值的特殊处理
+  if (x < -37) return 0;
+  if (x > 37) return 1;
+  
+  // 使用Rational Chebyshev Approximation方法
+  const a1 = 0.254829592;
+  const a2 = -0.284496736;
+  const a3 = 1.421413741;
+  const a4 = -1.453152027;
+  const a5 = 1.061405429;
+  const p = 0.3275911;
+  
+  // 计算绝对值并计算符号
+  const sign = x < 0 ? -1 : 1;
+  const absX = Math.abs(x);
+  
+  // 使用多项式近似
+  const t = 1 / (1 + p * absX);
+  const y = t * Math.exp(-absX * absX / 2) * 
+            (a1 + t * (a2 + t * (a3 + t * (a4 + t * a5))));
+  
+  return 0.5 * (1 + sign * (1 - y));
 }
 
 // Approximate inverse standard normal CDF
@@ -574,6 +931,107 @@ function inverseNormalCDF(p: number): number {
     
     return result * (q < 0 ? -1 : 1);
   }
+}
+
+// 计算功效函数（Power Function）- 修正版本
+function calculatePowerFunction(
+  hypothesisMean: number,
+  sampleStdDev: number,
+  sampleSize: number,
+  significanceLevel: number,
+  actualMean: number,
+  alternativeType: 'two-sided' | 'greater' | 'less' = 'two-sided'
+): number {
+  // 计算标准误差
+  const standardError = sampleStdDev / Math.sqrt(sampleSize);
+  
+  // 计算临界值根据备择假设类型
+  let lowerCritical: number;
+  let upperCritical: number;
+  
+  if (alternativeType === 'two-sided') {
+    upperCritical = inverseNormalCDF(1 - significanceLevel / 2);
+    lowerCritical = -upperCritical;
+  } else if (alternativeType === 'greater') {
+    upperCritical = inverseNormalCDF(1 - significanceLevel);
+    lowerCritical = -Infinity;
+  } else { // 'less'
+    lowerCritical = inverseNormalCDF(significanceLevel);
+    upperCritical = Infinity;
+  }
+  
+  // 计算检验统计量在H₁下的分布参数
+  const effectSize = actualMean - hypothesisMean;
+  const nonCentrality = effectSize / standardError;
+  
+  // 计算功效基于备择假设类型
+  let power: number;
+  
+  if (alternativeType === 'two-sided') {
+    // 双侧检验的功效：P(Z < lowerCritical - nonCentrality) + P(Z > upperCritical - nonCentrality)
+    const lowerTail = normalCDF(lowerCritical - nonCentrality);
+    const upperTail = 1 - normalCDF(upperCritical - nonCentrality);
+    power = lowerTail + upperTail;
+  } else if (alternativeType === 'greater') {
+    // 单侧检验（右侧）：P(Z > upperCritical - nonCentrality)
+    power = 1 - normalCDF(upperCritical - nonCentrality);
+  } else { // 'less'
+    // 单侧检验（左侧）：P(Z < lowerCritical - nonCentrality)
+    power = normalCDF(lowerCritical - nonCentrality);
+  }
+  
+  // 确保功效在[0,1]范围内
+  return Math.max(0, Math.min(1, power));
+}
+
+// 生成功效函数数据点 - 修正版本
+function generatePowerData(
+  hypothesisMean: number,
+  sampleStdDev: number,
+  sampleSize: number,
+  significanceLevel: number,
+  alternativeType: 'two-sided' | 'greater' | 'less' = 'two-sided'
+): { mean: number; power: number }[] {
+  // 计算标准误差（SE = σ/√n）
+  const standardError = sampleStdDev / Math.sqrt(sampleSize);
+
+  // 增加范围以显示更明显的功效变化
+  const range = 12; // 增加范围以更好地显示功效曲线
+  const numPoints = 200; // 增加数据点密度以获得更平滑的曲线
+  const powerData = [];
+
+  // 计算合适的数据点范围
+  let minEffectSize: number;
+  let maxEffectSize: number;
+  
+  if (alternativeType === 'two-sided') {
+    // 双侧检验：覆盖更大的范围以显示功效变化
+    minEffectSize = -range;
+    maxEffectSize = range;
+  } else if (alternativeType === 'greater') {
+    // 单侧检验（右侧）：从0到较大的正值
+    minEffectSize = -2; // 包含一些负值以便观察功效在原假设附近的行为
+    maxEffectSize = range;
+  } else { // 'less'
+    // 单侧检验（左侧）：从较大的负值到0
+    minEffectSize = -range;
+    maxEffectSize = 2; // 包含一些正值以便观察功效在原假设附近的行为
+  }
+
+  for (let i = 0; i < numPoints; i++) {
+    // 计算功效量（以标准误差为单位）
+    const effectSizeParam = minEffectSize + (i * (maxEffectSize - minEffectSize) / (numPoints - 1));
+
+    // 转换为真实均值：actualMean = hypothesisMean + effectSizeParam * SE
+    const actualMean = hypothesisMean + effectSizeParam * standardError;
+
+    // 计算功效
+    const power = calculatePowerFunction(hypothesisMean, sampleStdDev, sampleSize, significanceLevel, actualMean, alternativeType);
+
+    powerData.push({ mean: actualMean, power });
+  }
+
+  return powerData;
 }
 
 function calculatePosition(value: number, result: HypothesisTestResult): number {
